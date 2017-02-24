@@ -1,0 +1,11 @@
+# Active la réécriture d'URL
+RewriteEngine on
+# L'URL ne pointe pas vers un fichier existant
+RewriteCond %{REQUEST_FILENAME} !-f
+# L'URL ne pointe pas vers un dossier existant
+RewriteCond %{REQUEST_FILENAME} !-d
+# Règle de réécriture : transforme toutes les url entrées en index.php avec
+# le path en paramètre.
+# flags [NC = insensible à la casse ; L= n'exécute pas les règles ultérieures ;
+# QSA= permet de ré-attribuer la query string (paramètres) à la nouvelle chaîne]
+RewriteRule ^(.*)$ index.php?path=$1 [L,NC,QSA]
