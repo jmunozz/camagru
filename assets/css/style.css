@@ -1,0 +1,68 @@
+/*
+ ** GLOBAL
+ */
+
+.inline {
+	display:inline;
+}
+
+.center {
+	text-align:center;
+}
+
+.right {
+	text-align:right;
+}
+
+.container {
+	margin:10px 20px;
+}
+
+textarea {
+	height:100%;
+	width:100%;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+}
+
+a {
+	text-decoration:none;
+	color:initial;
+}
+
+.wrap {
+	height:100%;
+	width:100%;
+}
+
+/*
+** BUTTONS
+*/
+
+.button, .link-button{
+	border:1px solid black;
+	border-radius:15%;
+	padding:2px;
+	cursor:pointer;
+}
+
+.button:hover, .link-button:hover{
+	color:white;
+	background-color:black;
+}
+
+.link-button {
+	background: none;
+	font-size: 1em;
+	display:inline;
+}
+
+/*
+** INSTALL
+*/
+
+.log {
+	height:250px !important;
+	width:100%;
+}
+

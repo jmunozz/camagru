@@ -23,7 +23,7 @@ else  {
 		exit();
 	}
 	else {
-		$class = new $url[0]();
+		$class = new $url[0]($url_base);
 		if ($url[1]) {
 			if (method_exists($url[0], $url[1])) {
 				if ($url[2])

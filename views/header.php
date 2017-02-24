@@ -3,6 +3,6 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Camagru</title>
-		<link rel="stylesheet" type="text/css" href="<?=$base_url?>assets/css/style.css" />
+		<link rel="stylesheet" type="text/css" href="<?=$this->url_base?>/assets/css/style.css" />
 	</head>
 

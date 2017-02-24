@@ -3,6 +3,11 @@
 Class	install {
 
 	public $log ='';
+	public $url_base;
+
+	public function __construct($url_base) {
+		$this->url_base ='/'.$url_base;
+	}
 
 	public function index($page = 1) {
 		$this->_1();
@@ -11,7 +16,7 @@ Class	install {
 	public function _1() {
 
 		$success = FALSE;
-
+		
 		require_once('config/setup.php');
 		if (!$_POST['submit'] || ($_POST['submit'] && $_POST['action'] == 'check'))
 		{
