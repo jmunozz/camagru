@@ -12,7 +12,6 @@ foreach($controlers as $controler) {
 }
 $path = $_GET['path'];
 $url = explode('/', $path);
-print_r($url);
 
 if (!$url[0] || $url[0] == 'index.php' ) {
 	$home->index();
@@ -24,12 +23,13 @@ else  {
 		exit();
 	}
 	else {
+		$class = new $url[0]();
 		if ($url[1]) {
 			if (method_exists($url[0], $url[1])) {
 				if ($url[2])
-					call_user_func(array($url[0], $url[1]), $url[2]);
+					call_user_func(array($class, $url[1]), $url[2]);
 				else
-					call_user_func(array($url[0], $url[1]));
+					call_user_func(array($class, $url[1]));
 			}
 			else {
 				header('HTTP/1.O 404 Not Found');
@@ -38,6 +38,6 @@ else  {
 			}
 		}
 		else
-			call_user_func(array($url[0], 'index'));
+			call_user_func(array($class, 'index'));
 	}
 }

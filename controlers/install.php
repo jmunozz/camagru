@@ -1,28 +1,18 @@
 <?php
-global $log;
 
 Class	install {
 
+	public $log ='';
+
 	public function index($page = 1) {
-		require_once('config/setup.php');
-		switch ($page) {
-			case 1:
-				self::install_1();
-				break;
-			case 2:
-				self::install_2();
-				break;
-			case 3:
-				self::install_3();
-				break;
-		}
+		$this->_1();
 	}
 
-	public function install_1() {
+	public function _1() {
 
-		$log = '';
 		$success = FALSE;
 
+		require_once('config/setup.php');
 		if (!$_POST['submit'] || ($_POST['submit'] && $_POST['action'] == 'check'))
 		{
 			if (($dbh = Model_bdd::connect_host()) && $dbh->check_bd())
@@ -33,17 +23,17 @@ Class	install {
 			if (($dbh = Model_bdd::connect_host()) && $dbh->set_bd())
 				$success = TRUE;
 		}
+		$log = $dbh->log;
 		include('views/header.php');
 		include('views/install_1.php');
 	}
 
-	public function install_2() {
+	public function _2() {
 
 		$success = FALSE;
 		$alert = '';
-		$log = '';
 
-		echo 'merde';
+		require_once('config/setup.php');
 		if ($_POST['submit'] && (!$_POST['login'] || !$_POST['pwd'] || !$_POST['email']))
 			$alert = 'Attention tous les champs ne sont pas remplis'.PHP_EOL;
 		else if ($_POST['submit']) {
@@ -54,11 +44,12 @@ Class	install {
 			&& $dbh->set_admin($login, $pwd, $email))
 				$success = TRUE;
 		}
+		$log = $dbh->log;
 		include('views/header.php');
 		include('views/install_2.php');
 	}
 
-	public function install_3() {
+	public function _3() {
 		include('views/header.php');
 		include('views/install_3.php');
 	}

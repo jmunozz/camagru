@@ -9,6 +9,7 @@ class Model_bdd {
 	public $dbh;
 	public $DB_NAME; 
 	public $DB_TABLES;
+	public $log;
 
 # Try to connect with the server from infos included in 'db_infos.php'. 
 # If success, create an object to manipulate BDD.
@@ -18,7 +19,7 @@ class Model_bdd {
 			include (basename(__DIR__).'/'.'db_infos.php');
 			$dbh = new PDO($DB_HOST, $DB_USER, $DB_PWD, $DB_OPTIONS);
 		} catch (PDOException $e) {
-			$log = $log.'La connexion au serveur SQL a échouée'.
+			$this->log = $this->log.'La connexion au serveur SQL a échouée'.
 			$e->getMessage().PHP_EOL;
 			return (NULL);
 		}
@@ -29,9 +30,9 @@ class Model_bdd {
 
 	public function __construct ($dbh, $DB_NAME, $DB_TABLES) {
 		$this->dbh =  $dbh;
-		$this->DB_NAME =  $DB_NAME;
+		$this->DB_NAME = $DB_NAME;
 		$this->DB_TABLES =  $DB_TABLES;
-		$log = $log.'Connexion au serveur effectuée'.PHP_EOL;
+		$this->log = $this->log.'Connexion au serveur effectuée'.PHP_EOL;
 	}
 
 # Query to use $BD_NAME as default bd. If $BD_NAME does not exist, return FALSE.
@@ -43,11 +44,11 @@ class Model_bdd {
 
 }
 		catch (PDOException $e) {
-			$log = $log.'Impossible de rejoindre '.$this->DB_NAME.' : '.
+			$this->log = $this->log.'Impossible de rejoindre '.$this->DB_NAME.' : '.
 			$e->getMessage().PHP_EOL;
 			return (FALSE);
 		}
-		$log = $log.'Positionnement sur la BDD '.$this->DB_NAME.
+		$this->log = $this->log.'Positionnement sur la BDD '.$this->DB_NAME.
 		' effectué'.PHP_EOL;
 		return (TRUE);
 	}
@@ -66,16 +67,16 @@ class Model_bdd {
 				$statement->execute(array('table_schema' => $this->DB_NAME,
 				'table_name' => $table));
 			} catch (PDOException $e) {
-				$log = $log.'Impossible de checker la table '.
+				$this->log = $this->log.'Impossible de checker la table '.
 				$table.'  de la BDD'.$e->getMessage().PHP_EOL;
 				return (FALSE);
 			}
 			if (!($ret = $statement->fetch())) {
-				$log = $log.'La table '.$table.' n\'existe pas'.PHP_EOL;
+				$this->log = $this->log.'La table '.$table.' n\'existe pas'.PHP_EOL;
 				return (FALSE);
 			}
 		}
-		$log = $log.'Toutes les tables sont présentes'.PHP_EOL;
+		$this->log = $this->log.'Toutes les tables sont présentes'.PHP_EOL;
 		return (TRUE);
 	}
 
@@ -88,7 +89,7 @@ class Model_bdd {
 		try {
 			$this->dbh->query($query);
 		} catch (PDOException $e) {
-			$log = $log. 'Impossible de créer la base '.$e->getMessage().PHP_EOL;
+			$this->log = $this->log. 'Impossible de créer la base '.$e->getMessage().PHP_EOL;
 			return (FALSE);
 		}		
 		$images = glob('gallery/*');
@@ -96,7 +97,7 @@ class Model_bdd {
 			if (is_file($image))
 				unlink($image);
 		}
-		$log = 'Gallerie supprimée'.PHP_EOL;
+		$this->log = 'Gallerie supprimée'.PHP_EOL;
 		if (!$this->use_bd())
 			return (FALSE);
 		$query = 'CREATE TABLE users (
@@ -125,10 +126,10 @@ class Model_bdd {
 		try {
 			$this->dbh->query($query);
 		} catch (PDOException $e) {
-			$log = $log.'Impossible de créer les tables '.$e->getMessage().PHP_EOL;
+			$this->log = $this->log.'Impossible de créer les tables '.$e->getMessage().PHP_EOL;
 			return (FALSE);
 		}
-		$log = $log.'Tables crées'.PHP_EOL;
+		$this->log = $this->log.'Tables crées'.PHP_EOL;
 		return (TRUE);
 	}
 
@@ -143,11 +144,11 @@ class Model_bdd {
 			$this->dbh->query($query);
 		}
 		catch (PDOException $e) {
-			$log = $log.'Impossible de créer un compte administrateur '.
+			$this->log = $this->log.'Impossible de créer un compte administrateur '.
 			$e->getMessage().PHP_EOL;
 			return FALSE;
 		}
-		$log = $log.'Compte administraeur créé'.PHP_EOL;
+		$this->log = $this->log.'Compte administraeur créé'.PHP_EOL;
 		return TRUE;
 	}
 }
