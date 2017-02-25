@@ -1,8 +1,8 @@
 <body>
 	<section>
-	<center><h1>Installation du site</h1></center>
-	<div class = container>
-		<div class="wrap center log">
+	<center><h1>Installation du site 1/2</h1></center>
+	<div class ="container">
+		<div class="center log">
 			<textarea readonly><?php echo $log; ?></textarea>
 		</div>
 	</div>
@@ -22,8 +22,10 @@
 		</form>
 	</div>
 	</section>
-	<div class="container right">
-		<span class="button inline left">Suivant</span>
+	<div class="container">
+		<a href=<?=$this->url_base.'/install/_2'?>>
+		<span class="button inline right">Suivant</span>
+		</a>
 	</div>
 </body>
 </html>
