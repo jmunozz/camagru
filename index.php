@@ -1,7 +1,10 @@
 <?php
-$url_base = basename(__DIR__);
-$controlers_list = array('install.php', 'home.php');
-
+//ini_set('display_errors', 1); 
+//error_reporting(E_ALL);
+session_name('em');
+session_start();
+$url_base = '/'.basename(__DIR__);
+$controlers_list = array('install.php', 'home.php', 'signin.php', 'login.php', 'add.php');
 # Intègre tous les controlers en se protégeant contre l'upload de fichiers infectés.
 
 $controlers = glob('controlers/*.php'); // glob à partir du dossier courant.
@@ -10,10 +13,15 @@ foreach($controlers as $controler) {
 		require_once($controler);
 	}
 }
-$path = $_GET['path'];
-$url = explode('/', $path);
+if (isset($_GET['path'])) {
+	$path = $_GET['path'];
+	$url = explode('/', $path);
+}
+else
+	$url = NULL;
 
-if (!$url[0] || $url[0] == 'index.php' ) {
+if (!$url || $url[0] == 'index.php' ) {
+	$home = new Home($url_base);
 	$home->index();
 }
 else  {
@@ -41,3 +49,4 @@ else  {
 			call_user_func(array($class, 'index'));
 	}
 }
+?>
