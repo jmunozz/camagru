@@ -69,6 +69,7 @@ function previewImage() {
 		var video;
 		var canvas;
 		var preview;
+		var is_stream = false;
 
 		function setVideo() {
 			var video = document.createElement("video");
@@ -109,7 +110,6 @@ function previewImage() {
 			canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
 			var data = canvas.toDataURL('image/png');
 			preview.setAttribute('src', data);
-			console.log('event');
 		}
 
 		function addVideo() {
@@ -140,14 +140,19 @@ function previewImage() {
 
 
 		file_button.addEventListener("click", function() {
-			console.log("remettre image");
-			removeVideo();
-			addImage();
+			if (is_stream) {
+				removeVideo();
+				addImage();
+				is_stream = false;
+			}
 		});
 
 		play_button.addEventListener("click", function() {
-			removeImage();
-			addVideo();
+			if (!is_stream) {
+				removeImage();
+				addVideo();
+				is_stream = true;
+			}
 		});
 	}
 
