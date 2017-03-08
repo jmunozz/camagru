@@ -1,12 +1,13 @@
-<!doctype html>
-	<head>
-		<meta charset='UTF-8'>
-		<link rel='stylesheet' href="<?php echo $this->url_base.'/assets/css/style.css'; ?>" type="text/css" />
-		<link rel='stylesheet' href="<?php echo $this->url_base.'/assets/css/datainput.css'; ?>" type="text/css" />
-		<link href="https://fonts.googleapis.com/css?family=Raleway:400,600,700,900" rel="stylesheet">
-		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-		<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-		<script src="http://cdn.jquerytools.org/1.2.6/form/jquery.tools.min.js"></script>
-	</head>
-		<body>
+<header>
+	<div class="container">
+		<a href="<?php echo $this->url_base; ?>"><span>Home</span></a>
+<?php
+		if (!isset($_SESSION['user_login']) || !isset($_SESSION['user_id']) ||
+		!$_SESSION['user_login'] || !$_SESSION['user_id']) {
+?>
+		<a href="<?php echo $this->url_base.'/login'; ?>"><span>Connexion</span></a>
+<?php } else { ?>
+		<a href="<?php echo $this->url_base.'/login/out'; ?>"><span>Déconnexion</span></a>
+<?php } ?>
+	</div>
+</header>

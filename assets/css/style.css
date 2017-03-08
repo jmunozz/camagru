@@ -2,12 +2,20 @@
  ** GLOBAL
  */
 
+.column {
+	flex-direction:column;
+}
+
 .block {
 	display: block;
 }
 
 .inline {
 	display:inline;
+}
+
+.j-center {
+	justify-content:center;
 }
 
 .center {
@@ -20,6 +28,11 @@
 
 .container {
 	margin:10px 20px;
+	display:flex;
+}
+
+.page {
+	height:700px;
 }
 
 textarea {
@@ -35,6 +48,10 @@ a {
 	color:initial;
 }
 
+img {
+	width:100%;
+	display:block;
+}
 
 form{
 	text-align:left;
@@ -60,6 +77,7 @@ form input {
 .wrap {
 	height:100%;
 	width:100%;
+	position:relative;
 }
 
 /*
@@ -99,4 +117,27 @@ p.green {
 
 p.red {
 	color:red;
+}
+
+/*
+** MENU
+*/
+
+
+#camera {
+	width:90%;
+}
+
+#camera-menu {
+	width:10%;
+}
+
+.main {
+	width:70%;
+	flex:1;
+}
+
+.side {
+	width:20%;
+	max-width:200px;
 }

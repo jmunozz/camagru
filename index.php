@@ -1,6 +1,6 @@
 <?php
-//ini_set('display_errors', 1); 
-//error_reporting(E_ALL);
+ini_set('display_errors', 1); 
+error_reporting(E_ALL);
 session_name('em');
 session_start();
 $url_base = '/'.basename(__DIR__);
@@ -32,9 +32,9 @@ else  {
 	}
 	else {
 		$class = new $url[0]($url_base);
-		if ($url[1]) {
+		if (isset($url[1]) && $url[1]) {
 			if (method_exists($url[0], $url[1])) {
-				if ($url[2])
+				if (isset($url[2]) && $url[2])
 					call_user_func(array($class, $url[1]), $url[2]);
 				else
 					call_user_func(array($class, $url[1]));

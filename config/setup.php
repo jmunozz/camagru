@@ -9,6 +9,7 @@ class Model_bdd {
 	public $dbh;
 	public $DB_NAME; 
 	public $DB_TABLES;
+	public $SET_TABLES;
 	public $log;
 
 # Try to connect with the server from infos included in 'db_infos.php'. 
@@ -23,15 +24,16 @@ class Model_bdd {
 			$e->getMessage().PHP_EOL;
 			return (NULL);
 		}
-		return (new Model_bdd($dbh, $DB_NAME, $DB_TABLES));
+		return (new Model_bdd($dbh, $DB_NAME, $DB_TABLES, $SET_TABLES));
 	}
 
 # Fill the instance variables with infos from "db_infos.php".
 
-	public function __construct ($dbh, $DB_NAME, $DB_TABLES) {
+	public function __construct ($dbh, $DB_NAME, $DB_TABLES, $SET_TABLES) {
 		$this->dbh =  $dbh;
 		$this->DB_NAME = $DB_NAME;
 		$this->DB_TABLES =  $DB_TABLES;
+		$this->SET_TABLES = $SET_TABLES;
 		$this->log = $this->log.'Connexion au serveur effectuée'.PHP_EOL;
 	}
 
@@ -100,31 +102,8 @@ class Model_bdd {
 		$this->log = 'Gallerie supprimée'.PHP_EOL;
 		if (!$this->use_bd())
 			return (FALSE);
-		$query = 'CREATE TABLE users (
-								id INT PRIMARY KEY AUTO_INCREMENT,
-								login VARCHAR(255) NOT NULL,
-								pwd VARCHAR(255) NOT NULL,
-								email VARCHAR(255) NOT NULL,
-								valid BOOLEAN DEFAULT 0);
-				CREATE TABLE images (
-								id INT PRIMARY KEY AUTO_INCREMENT,
-								id_user INT NOT NULL,
-								type INT,
-								name VARCHAR(255) NOT NULL,
-								path VARCHAR(255) NOT NULL,
-								date DATETIME);
-				CREATE TABLE comments (
-								id INT PRIMARY KEY AUTO_INCREMENT,
-								id_user INT NOT NULL,
-								id_image INT NOT NULL,
-								text VARCHAR(512) NOT NULL,
-								DATE DATETIME);
-				CREATE TABLE likes (
-								id INT PRIMARY KEY AUTO_INCREMENT,
-								id_user INT NOT NULL,
-								id_image INT NOT NULL);';
 		try {
-			$this->dbh->query($query);
+			$this->dbh->query($this->SET_TABLES);
 		} catch (PDOException $e) {
 			$this->log = $this->log.'Impossible de créer les tables '.$e->getMessage().PHP_EOL;
 			return (FALSE);

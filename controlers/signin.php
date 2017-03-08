@@ -23,7 +23,7 @@ Class Signin {
 
 	private function defaut($alert = NULL) {
 		$comite = $this->bdd_obj->get_table_field('em_comites', 'id', 'name');
-		include ('views/header.php');
+		include ('views/head.php');
 		include ('views/signin.php');
 		include ('views/footer.php');
 	}
@@ -70,7 +70,7 @@ Class Signin {
 
 	private function success() {
 		$success_message = 'Vous vous êtes bien enregistré';
-		include ('views/header.php');
+		include ('views/head.php');
 		include ('views/success.php');
 		include ('views/footer.php');
 	}

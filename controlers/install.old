@@ -29,7 +29,7 @@ Class	install {
 				$success = TRUE;
 		}
 		$log = $dbh->log;
-		include('views/header.php');
+		include('views/head.php');
 		include('views/install_1.php');
 	}
 
@@ -50,13 +50,13 @@ Class	install {
 				$success = TRUE;
 		}
 		$log = $dbh->log;
-		include('views/header.php');
+		include('views/head.php');
 		include('views/install_2.php');
 	}
 
 	public function _3() {
 		rename('controlers/install.php', 'controlers/install.old');
-		include('views/header.php');
+		include('views/head.php');
 		include('views/install_3.php');
 	}
 }

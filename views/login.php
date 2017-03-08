@@ -2,10 +2,10 @@
 	<section>
 		<center><h1>Login</h1></center>
 		<div class="container">
-			<form>
+			<form method="post" action="<?php $this->url_base.'/login' ?>">
 				<h3>Connectez-vous</h3>
-				<?php if ($success == FALSE && $alert) { ?>
-					<p class="red"><?php echo $alert; ?></p>
+				<?php if ($this->_data) { ?>
+					<p class="red"><?php echo $this->_data; ?></p>
 				<?php }?>
 				<label class="block">login</label>
 				<input  type="text" name="login" placeholder="ex:root">
