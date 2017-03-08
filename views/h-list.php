@@ -42,16 +42,16 @@
 				scroll[1].addEventListener("mouseover", addScrollRight);
 			}
 
-			var selected = null;
+			var h_selected = null;
 
-			function setSelected(new_selected) {
-			if (selected){
-				selected.classList.remove("selected");
+			function setHSelected(new_selected) {
+			if (h_selected){
+				h_selected.classList.remove("selected");
 			}
-			selected = new_selected;
-			console.log(selected);
-			if (selected && !selected.classList.contains("selected"))
-				selected.classList.add("selected");
+			h_selected = new_selected;
+			console.log(h_selected);
+			if (h_selected && !h_selected.classList.contains("selected"))
+				h_selected.classList.add("selected");
 			}
 
 			function addClick() {
@@ -59,7 +59,7 @@
 			console.log(li);
 			li.forEach(function(li) {
 			li.addEventListener("click", function() {
-			setSelected(this);});
+			setHSelected(this);});
 			});
 			}
 			addScroll();
