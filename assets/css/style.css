@@ -2,6 +2,11 @@
  ** GLOBAL
  */
 
+:root {
+	--background:#29537c;
+	--font:white;
+}
+
 .column {
 	flex-direction:column;
 }
@@ -32,7 +37,10 @@
 }
 
 .page {
-	height:700px;
+}
+
+::-webkit-scrollbar {
+	display: none;
 }
 
 textarea {
@@ -59,6 +67,11 @@ form{
 	box-sizing:border-box;
 	margin:0 auto;
 	max-width:300px;
+}
+
+h1 {
+	color:var(--font);
+	font-size:2em;
 }
 
 form input {
@@ -126,6 +139,7 @@ p.red {
 
 #camera {
 	width:90%;
+	position:relative;
 }
 
 #camera-menu {
@@ -138,6 +152,42 @@ p.red {
 }
 
 .side {
-	width:20%;
-	max-width:200px;
+	width:200px;
+	height:800px;
+}
+
+.header {
+	background-color:var(--background);
+	text-align:center;
+	margin-right:10px;
+	padding:5px 15px;
+}
+
+.menu {
+	background-color:var(--background);
+}
+
+#camera-menu > input {
+	display:none;
+}
+
+/*
+** CAMERA
+*/
+
+#preview {
+	position:absolute;
+	height:100px;
+	width:100px;
+	top:0;
+	right:0;
+	border:solid black 2px;
+}
+
+video {
+	width:100%;
+}
+
+canvas {
+	display:none;
 }

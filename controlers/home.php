@@ -7,7 +7,8 @@ Class Home {
 	}
 	
 	public function index() {
-		if (!$_SESSION['user_id'] || !$_SESSION['user_login']) {
+		if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_login']) ||
+			!$_SESSION['user_id'] || !$_SESSION['user_login']) {
 			header('location: '.$this->url_base.'/login');
 			return;
 		}

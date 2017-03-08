@@ -12,12 +12,12 @@ class Model_bdd {
 	public $SET_TABLES;
 	public $log;
 
-# Try to connect with the server from infos included in 'db_infos.php'. 
+# Try to connect with the server from infos included in 'infos.php'. 
 # If success, create an object to manipulate BDD.
 
 	static public function connect_host() {
 		try {
-			include (basename(__DIR__).'/'.'db_infos.php');
+			include (basename(__DIR__).'/'.'infos.php');
 			$dbh = new PDO($DB_HOST, $DB_USER, $DB_PWD, $DB_OPTIONS);
 		} catch (PDOException $e) {
 			$this->log = $this->log.'La connexion au serveur SQL a échouée'.
@@ -27,7 +27,7 @@ class Model_bdd {
 		return (new Model_bdd($dbh, $DB_NAME, $DB_TABLES, $SET_TABLES));
 	}
 
-# Fill the instance variables with infos from "db_infos.php".
+# Fill the instance variables with infos from "infos.php".
 
 	public function __construct ($dbh, $DB_NAME, $DB_TABLES, $SET_TABLES) {
 		$this->dbh =  $dbh;

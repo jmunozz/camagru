@@ -37,7 +37,7 @@ Class Login {
 
 		require_once('models/bdd_model.php');
 		if ($this->bdd == NULL) {
-			$this->_data = 'Connexion BDD impossible'.PHP_EOL;
+			$this->_data = Bdd::$err_init;
 			return (FALSE);
 		}
 		$users = $this->bdd_obj->get_table_field('users', 'id',

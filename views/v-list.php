@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 		<div class="v-list">
-			<div class="scroll">
-				<img height="100%" alt="" src="assets/img/scroll-top.png"/>
+			<div class="v-scroll">
+				<img  alt="" src="assets/img/scroll-top.png"/>
 			</div>
 			<ul>
 <?php
@@ -10,8 +10,8 @@
 				}
 ?>
 			</ul>
-			<div class="scroll">
-				<img height="100%" alt="" src="assets/img/scroll-bottom.png"/>
+			<div class="v-scroll">
+				<img alt="" src="assets/img/scroll-bottom.png"/>
 			</div>
 		</div>
 		<script>
@@ -37,7 +37,7 @@
 				clearInterval(stop)});
 				}
 
-				var scroll = document.querySelectorAll(".scroll");
+				var scroll = document.querySelectorAll(".v-scroll");
 				scroll[0].addEventListener("mouseover", addScrollTop);
 				scroll[1].addEventListener("mouseover", addScrollBottom);
 			}
