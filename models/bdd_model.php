@@ -8,6 +8,7 @@ class Bdd {
 	static $err_init = 'init_error: ';
 	public $log;
 	public $dbh;
+	public $last_statement_return;
 
 	static public function get_instance() {
 		require_once('config/infos.php');
@@ -107,14 +108,20 @@ class Bdd {
 
 # Prepare and execute a statement, update the $log.
 
-	private function do_statement($query, $args = NULL) {
+	public function do_statement($query, $args = NULL) {
 		try {
 			$statement = $this->dbh->prepare($query);
 			if ($args)
 				$statement->execute($args);
 			else
 				$statement->execute();
-			$result = $statement->fetchAll();
+			$this->last_statement_return = $statement->rowCount();
+			try {
+				$result = $statement->fetchAll();
+			}
+			catch (PDOException $e) {
+				$result = NULL;
+			}
 		}
 		catch (PDOException $e) {
 			echo 'Problème dans la requête: '.$e->getMessage().PHP_EOL;
@@ -122,8 +129,13 @@ class Bdd {
 		}
 		return ($result);
 	}
-}
 
+#Return how many rows affected by last statement.
+
+	public function last_statement_return() {
+		return ($this->last_statement_return);
+	}
+}
 if (($this->bdd_obj = Bdd::get_instance()) == NULL) {
 	$this->bdd = NULL;
 }

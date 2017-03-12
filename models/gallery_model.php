@@ -1,0 +1,58 @@
+<?php
+
+Class Gallery_model {
+	public $url_base;
+	public $bdd;
+	public $bdd_obj;
+
+	public function __construct($url_base) {
+		$this->url_base = $url_base;
+		include ('models/bdd_model.php');
+	}
+
+	public function get_all_images() {
+		$query = "SELECT images.id AS 'img_id',name AS 'titre',
+			users.login AS 'user', date, path, sub.nb_like AS 'nb_like',
+			sub2.nb_comment as 'nb_comment' FROM images 
+			INNER JOIN users 
+			ON users.id =images.id_user 
+			LEFT OUTER JOIN (SELECT COUNT(likes.id) AS 'nb_like',
+			likes.id_image FROM likes GROUP BY id_image) sub 
+			ON sub.id_image = images.id 
+			LEFT OUTER JOIN (SELECT COUNT(comments.id) AS 'nb_comment',
+			comments.id_image FROM comments GROUP BY id_image) sub2 
+			ON sub2.id_image = images.id";
+		return ($this->bdd_obj->do_statement($query));
+	}
+
+	public function get_user_likes($id_user) {
+		$query = "SELECT id_image FROM likes WHERE id_user = :id_user";
+		$args = array('id_user' => $id_user);
+		return ($this->bdd_obj->do_statement($query, $args));
+	}
+
+	public function get_comments_image($id_image) {
+		$query = "SELECT * FROM comments where id_image = :id_image";
+		$args = array('id_image' => $id_image);
+		return ($this->bdd_obj->do_statement($query, $args));
+	}
+
+	public function add_like($id_user, $id_image) {
+		$query = 'DELETE FROM likes WHERE id_user = :id_user AND id_image = :id_image';
+		$query_add = 'INSERT INTO likes (id_user, id_image) VALUES (:id_user, :id_image)';
+		$args = array('id_user' => $id_user, 'id_image' => $id_image);
+		$this->bdd_obj->do_statement($query, $args);
+		$ret = $this->bdd_obj->last_statement_return();
+		if (!$ret) {
+			$this->bdd_obj->do_statement($query_add, $args);
+			return ('add');
+		}
+		else
+			return ('delete');
+	}
+}
+
+
+
+
+

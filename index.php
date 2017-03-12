@@ -4,7 +4,7 @@ error_reporting(E_ALL);
 session_name('em');
 session_start();
 $url_base = '/'.basename(__DIR__);
-$controlers_list = array('install.php', 'home.php', 'signin.php', 'login.php', 'add.php');
+$controlers_list = array('install.php', 'home.php', 'signin.php', 'login.php', 'add.php', 'gallery.php');
 # Intègre tous les controlers en se protégeant contre l'upload de fichiers infectés.
 
 $controlers = glob('controlers/*.php'); // glob à partir du dossier courant.

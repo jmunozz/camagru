@@ -5,6 +5,7 @@
 :root {
 	--background:#29537c;
 	--font:white;
+	--b2:white;
 }
 
 .column {
@@ -21,6 +22,16 @@
 
 .j-center {
 	justify-content:center;
+}
+
+.y-j-center {
+	align-items: center;
+}
+
+.b2 {
+	background-color:var(--b2);
+	border-radius:50px;
+	padding:15px;
 }
 
 .center {
@@ -41,6 +52,14 @@
 
 ::-webkit-scrollbar {
 	display: none;
+}
+
+label {
+	color: var(--font);
+}
+
+body {
+	background-color: var(--background);
 }
 
 textarea {
@@ -145,6 +164,9 @@ p.red {
 #camera-menu {
 	width:10%;
 }
+#camera-menu > img {
+filter:hue-rotate(70deg);
+}
 
 .main {
 	width:70%;
@@ -157,7 +179,6 @@ p.red {
 }
 
 .header {
-	background-color:var(--background);
 	text-align:center;
 	margin-right:10px;
 	padding:5px 15px;
@@ -165,6 +186,7 @@ p.red {
 
 .menu {
 	background-color:var(--background);
+	border-bottom:solid white 2px;
 }
 
 #camera-menu > input {
@@ -190,4 +212,56 @@ video {
 
 canvas {
 	display:none;
+}
+
+
+/*
+** GALLERY
+*/
+
+.img {
+	position:relative;
+	z-index:10;
+	border-radius:20px;
+	align-items:flex-start;
+	width:300px;
+	min-width:200px;
+}
+
+.opac {
+	position:absolute;
+	top:0;
+	right:0;
+	left:0;
+	bottom:0;
+	z-index:-1;
+	background-color:white;
+	opacity:0.5;
+	border-radius:20px;
+}
+
+.img_infos {
+	padding:4px;
+}
+
+.img_infos > span {
+	padding:4px;
+	text-align:center;
+}
+
+.icon  img {
+	height:50px;
+	width:50px;
+}
+
+.icon  span {
+	vertical-align:middle;
+	font-size:2em;
+}
+
+.img > img {
+}
+
+.gallery {
+	flex-wrap:wrap;
 }

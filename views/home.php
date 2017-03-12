@@ -1,6 +1,6 @@
 <div class="container page">
 	<div class="main container column">
-		<div class="container">
+		<div class="container b2">
 			<div id="camera">
 				<img src="assets/img/camera.png" />
 			</div>
@@ -13,13 +13,13 @@
 				<input type="file" id="file">
 			</div>
 		</div>
-		<div class="container column">
+		<div class="container column b2">
 <?php
 include ('views/h-list.php');
 ?>
 		</div>
 	</div>
-	<div class="side container">
+	<div class="side j-center container b2">
 <?php
 include ('views/v-list.php');
 ?>
