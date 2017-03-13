@@ -31,6 +31,24 @@ Class Gallery {
 		}
 	}
 
+	public function get_comments() {
+		if (!isset($_POST['id_image']) || !$_POST['id_image'])
+			$this->display();
+		else {
+			$comments = $this->model->get_comments($_POST['id_image']);
+			header('Content-Type: text/xml');
+			echo '<comments>';
+			foreach ($comments as $comment) {
+				echo '<comment>';
+				echo '<user_login>'.$comment['user_login'].'</user_login>';
+				echo '<date>'.$comment['date'].'</date>';
+				echo '<text>'.$comment['text'].'</text>';
+				echo '</comment>';
+			}
+			echo '</comments>';
+		}
+	}
+
 	public function like() {
 		if (!isset($_SESSION['user_id']) || !$_SESSION['user_id'] || !isset(
 		$_POST['id_image']) || !$_POST['id_image'])
@@ -47,6 +65,7 @@ Class Gallery {
 
 	public function display() {
 		$images = $this->model->get_all_images();
+		$images = $this->model->transform_null($images);
 		include ('views/head.php');
 		include ('views/header.php');
 		include ('views/gallery.php');

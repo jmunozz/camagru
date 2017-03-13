@@ -57,6 +57,66 @@ function like() {
 	}
 }
 
+function add_comment(ev, id_image) {
+	if (ev.charCode == 13) {
+		sendRequest('text', setRequest('POST', 'gallery/get_comments',
+		'id_image=' + id_image),
+			function (response) {
+				display_comment(id_image, response);
+			});*/
+		console.log(id_image);
+	}
+		
+}
+
+
+function comment() {
+
+	function display_comment(id_image, response) {
+		var com = {login: '', date: '', text: ''};
+		var tab = response.getElementsByTagName('comment');
+		var img = document.getElementById(id_image);
+		console.log(tab);
+		console.log(img);
+		var div_comment = document.createElement('div');
+		div_comment.setAttribute('class', 'div_comment');
+		img.insertBefore(div_comment, img.children[3]);
+		for (var i = 0; i < tab.length; i++) {
+			console.log(tab[i].getElementsByTagName('user_login')[0].innerHTML);
+			com.login = tab[i].getElementsByTagName('user_login')[0].innerHTML;
+			com.date = tab[i].getElementsByTagName('date')[0].innerHTML;
+			com.text = tab[i].getElementsByTagName('text')[0].innerHTML;
+			console.log(com);
+			p = document.createElement('p');
+			p.innerHTML = '<bold>'+com.date+'</bold>'+'<br />'+com.login+
+			':  '+com.text;
+			div_comment.appendChild(p);
+		}
+			var ev;
+			p = document.createElement('input');
+			p.setAttribute("type", "text");
+			p.setAttribute("placeholder", "Add a comment");
+			p.onkeypress = function(ev) {
+				add_comment(ev, id_image);
+			};
+			div_comment.appendChild(p);
+	}
+		
+	var comment_all = document.querySelectorAll('.comment');
+	for (var i = 0; i < comment_all.length; i++) {
+		comment_all[i].addEventListener("click", function() {
+			var comment = this;
+			var id_image = this.parentNode.parentNode.parentNode.id;
+			sendRequest('XML', setRequest('POST', 'gallery/get_comments',
+			'id_image=' + id_image),
+			function (response) {
+				display_comment(id_image, response);
+			});
+		});
+	}
+}
+
 Resize_control();
 likeSetup();
 like();
+comment();

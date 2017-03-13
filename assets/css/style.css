@@ -265,3 +265,12 @@ canvas {
 .gallery {
 	flex-wrap:wrap;
 }
+
+.div_comment {
+	height:100px;
+	width:100%;
+	overflow-y:scroll;
+	white-space:wrap;
+	background-color:white;
+	padding:10px;
+}

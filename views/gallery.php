@@ -19,8 +19,8 @@
 			<img class="photo" src="<?php echo $this->url_base; ?>/assets/img/camera.png"/>
 			<div class="container icon">
 				<div class="container">
-					<span class="nb"><?php echo $image['nb_comment']; ?><span>
-					<img src="<?php echo $this->url_base; ?>/assets/img/comment.png" />
+					<span class="nb"><?php echo $image['nb_comment']; ?></span>
+					<img  class ="comment" src="<?php echo $this->url_base; ?>/assets/img/comment.png" />
 				</div>
 				<div class="container">
 					<span class="nb"><?php echo $image['nb_like']; ?></span>

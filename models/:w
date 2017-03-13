@@ -31,12 +31,8 @@ Class Gallery_model {
 		return ($this->bdd_obj->do_statement($query, $args));
 	}
 
-	public function get_comments($id_image) {
-		$query = 
-				'SELECT users.login AS \'user_login\', DATE AS \'date\', text FROM comments
-				INNER JOIN users
-				ON users.id = comments.id_user
-				WHERE comments.id_image = :id_image';
+	public function get_comments_image($id_image) {
+		$query = "SELECT * FROM comments where id_image = :id_image";
 		$args = array('id_image' => $id_image);
 		return ($this->bdd_obj->do_statement($query, $args));
 	}
@@ -53,14 +49,13 @@ Class Gallery_model {
 		}
 		else
 			return ('delete');
-	}
 
 	public function transform_null($images) {
-		for($i = 0; isset($images[$i]);  $i++) {
-			if (!$images[$i]['nb_like'])
-				$images[$i]['nb_like'] = 0;
-			if (!$images[$i]['nb_comment'])
-				$images[$i]['nb_comment'] = 0;
+		foreach($images as $image) {
+			if (!$image['nb_like'])
+				$image['nb_like'] = 0;
+			if (!$image['nb_comment'])
+				$image['nb_comment'] = 0;
 		}
 		return ($images);
 	}

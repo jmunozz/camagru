@@ -3,6 +3,9 @@
 		<a href="<?php echo $this->url_base; ?>">
 			<div class="header"><h1>Home</h1></div>
 		</a>
+		<a href="<?php echo $this->url_base; ?>/gallery">
+			<div class="header"><h1>Gallery</h1></div>
+		</a>
 <?php
 		if (!isset($_SESSION['user_login']) || !isset($_SESSION['user_id']) ||
 		!$_SESSION['user_login'] || !$_SESSION['user_id']) {
