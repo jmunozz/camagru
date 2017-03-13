@@ -31,6 +31,16 @@ Class Gallery_model {
 		return ($this->bdd_obj->do_statement($query, $args));
 	}
 
+	public function add_comment($id_user, $id_image, $text) {
+		$query = 
+			'INSERT INTO comments (id_user, id_image, text, DATE)
+			VALUES(:id_user , :id_image , :text, NOW())';
+		$args = array('id_user' => $id_user, 'id_image' => $id_image, 'text'
+		=> $text);
+		$this->bdd_obj->do_statement($query, $args);
+		return ($this->bdd_obj->last_statement_return());
+	}
+
 	public function get_comments($id_image) {
 		$query = 
 				'SELECT users.login AS \'user_login\', DATE AS \'date\', text FROM comments

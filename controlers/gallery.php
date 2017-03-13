@@ -31,6 +31,26 @@ Class Gallery {
 		}
 	}
 
+	public function add_comment() {
+		if (!isset($_SESSION['user_id']) || !$_SESSION['user_id'] || !isset(
+			$_POST['id_image']) || !$_POST['id_image'] || !isset($_POST['text']) ||
+			!$_POST['text'])
+			$this->display();
+		else {
+			$ret = $this->model->add_comment($_SESSION['user_id'], 
+			$_POST['id_image'], $_POST['text']);
+			if ($ret) {
+				header('Content-Type: text/xml');
+				echo '<comment>';
+				echo '<user_login>'.$_SESSION['user_login'].'</user_login>';
+				echo '<date>'.strftime('%Y-%m-%d %k:%M').'</date>';
+				echo '<text>'.$_POST['text'].'</text>';
+				echo '</comment>';
+			}
+		}
+	}
+	
+
 	public function get_comments() {
 		if (!isset($_POST['id_image']) || !$_POST['id_image'])
 			$this->display();
