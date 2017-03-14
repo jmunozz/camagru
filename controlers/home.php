@@ -14,8 +14,12 @@ Class Home {
 		}
 		else 
 		{
-$imgs = array(array('path' => 'assets/img/camera.png'), array('path' => 'assets/img/camera.png'), array('path' => 'assets/img/camera.png'), array('path' => 'assets/img/camera.png'), array('path' => 'assets/img/camera.png'));
-
+			include ('models/gallery_model.php');
+			$gallery_model = new Gallery_model($this->url_base);
+			$gallery = $gallery_model->get_all_images();
+			$filters = $gallery_model->get_all_filters($_SESSION['user_id']);
+			$h_list = $filters;
+			$v_list = $gallery;
 			include('views/head.php');
 			include('views/header.php');
 			include('views/home.php');

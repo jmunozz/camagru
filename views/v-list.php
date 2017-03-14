@@ -5,7 +5,7 @@
 			</div>
 			<ul>
 <?php
-				foreach($imgs as $img) {
+				foreach($gallery as $img) {
 					echo '<li><img src="'.$img['path'].'" /></li>';
 				}
 ?>

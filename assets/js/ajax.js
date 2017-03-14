@@ -31,15 +31,28 @@ function sendRequest (type, request, callback) {
 			if (xhr.status != 200 && xhr.status != 0)
 				return null;
 			else {
-				if (type == "XML")
+				if (type == "XML") {
 					callback(xhr.responseXML);
-				else 
+					xhr = null;
+				}
+				else {
 					callback(xhr.responseText);
+					xhr = null;
+				}
 			}
 		}
 	}
 	request();
 };
+
+//Take a tab and transform it into a formData object.
+
+function getFormData(args) {
+	var data = new formData();
+	for (var i = 0 ; i < args.length ; i++) {
+		data.args[i]
+	}
+
 
 function setRequest(method, path, args) {
 	return function() {

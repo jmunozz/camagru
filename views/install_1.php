@@ -1,6 +1,6 @@
 <body>
 	<section>
-	<center><h1>Installation du site 1/2</h1></center>
+	<center><h1>Installation du site 1/3</h1></center>
 	<div class ="container">
 		<div class="center log">
 			<textarea readonly><?php echo $log; ?></textarea>

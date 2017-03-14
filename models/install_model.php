@@ -1,17 +1,15 @@
 <?php
-
 /*
 ** Fournit des instructions d'installation de la BDD.
 */
 
 class Install_model {
-
 	public $dbh;
 	public $DB_NAME; 
 	public $DB_TABLES;
 	public $SET_TABLES;
 	public $log;
-
+	
 # Try to connect with the server from infos included in 'db_infos.php'. 
 # If success, create an object to manipulate BDD.
 
@@ -37,7 +35,7 @@ class Install_model {
 		$this->log = $this->log.'Connexion au serveur effectuée'.PHP_EOL;
 	}
 
-# Query to use $BD_NAME as default BDD. If $BD_NAME does not exist, return FALSE.
+	# Query to use $BD_NAME as default BDD. If $BD_NAME does not exist, return FALSE.
 
 	public function use_bd() {
 		$query = 'USE '.$this->DB_NAME;
@@ -49,15 +47,14 @@ class Install_model {
 # After trying to use the BD, check if the required tables are present.
 
 	public function check_bd() {
-
 		if (!$this->use_bd())
 			return FALSE;
 		$query =
 			'SELECT * FROM INFORMATION_SCHEMA.COLUMNS 
 			WHERE TABLE_SCHEMA =:table_schema AND TABLE_NAME =:table_name';
 		$err_log = '';
-		if (($state = $this->prepare_statement($query)) == FALSE)
-			return (FALSE);
+		if (($state = $this->prepare_statement($query, $err_log)) == FALSE)
+			returr (FALSE);
 		foreach ($this->DB_TABLES as $table) {
 			$err_log = 'Erreur: check de la table '.$table;
 			$succ_log = '';
@@ -77,7 +74,7 @@ class Install_model {
 # Set a new BDD. If a BDD already exists, drop it and erase gallery content.
 
 	public function set_bd() {
-
+	$this->erase_gallery();
 		$query =
 			'DROP DATABASE IF EXISTS '.$this->DB_NAME.';
 			CREATE DATABASE IF NOT EXISTS '.$this->DB_NAME;
@@ -90,13 +87,23 @@ class Install_model {
 		if (!$this->use_bd())
 			return (FALSE);
 		$query = $this->SET_TABLES;
-		echo $query;
 		$err_log = 'Impossible de créer les tables de la BDD';
 		$succ_log = 'Les tables de la BDD ont été créés';
 		return ($this->do_query($query, $err_log, $succ_log));
 	}
 
-# Set the BDD in french (month display).
+# Erase gallery.
+
+	private function erase_gallery() {
+		$images = glob('gallery/*.*');
+		foreach ($images as $image) {
+			if (is_file($image))
+				unlink($image);
+		}
+		$this->log = 'Gallerie supprimée'.PHP_EOL;
+	}
+
+	# Set the BDD in french (month display).
 
 	public function set_french_bdd() {
 	if (!$this->use_bd())
@@ -107,15 +114,14 @@ class Install_model {
 	return ($this->do_query($query, $err_log, $succ_log));
 	}
 
-# Insert an administrator in the BDD.
+	# Insert an administrator in the BDD.
 
-	public function set_admin($nom, $pre, $mail, $pwd) {
+	public function set_admin($login, $pwd, $email) {
 		if (!$this->use_bd())
 			return FALSE;
-		$query =
-		"INSERT into em_users (nom, prenom, mail, pwd, droits, date)
-		VALUES ('".$nom."', '".$pre."', '".$mail."', '".$pwd."', 'admin',
-		NOW())";
+		$query = sprintf("INSERT INTO users (login, pwd, email, valid)
+				VALUES ('%s', '%s', '%s', '1')", $login, hash('whirlpool', $pwd), $email);
+
 		$err_log = 'Impossible d\'insérer l\'administrateur';
 		$succ_log = 'L\'administrateur a été inséré';
 		return ($this->do_query($query, $err_log, $succ_log));
@@ -135,7 +141,7 @@ class Install_model {
 		$this->log = $this->log.$succ_log.PHP_EOL;
 		return (TRUE);
 	}
-
+	
 # Prepare a query, update the $log if necessary.
 
 	private function prepare_statement($query, $err_log) {
@@ -149,7 +155,7 @@ class Install_model {
 		}
 		return ($statement);
 	}
-
+	
 # Execute a statement, update the $log.
 
 	private function do_statement($statement, $args, $err_log, $succ_log) {
@@ -165,4 +171,28 @@ class Install_model {
 		return (TRUE);
 	}
 
+# Insert an image in the BDD. Informations are contained in tab $image.
+
+	public function insert_image() {
+		$query = 
+			'INSERT INTO images (id_user, type, name, path, date)
+			VALUES (:id_user, :type, :name, :path, NOW())';
+		return ($query);
+	}
+
+# Insert all images as default filters in the BDD;
+
+	public function insert_filters($filters) {
+		$this->use_bd();
+		$image = array('type' => 2, 'id_user' => 0);
+		if (($statement = $this->prepare_statement($this->insert_image(), ''))) {
+			foreach($filters as $filter) {
+				$info = pathinfo($filter);
+				$image['path'] = $filter;
+				$image['name'] = basename($filter, '.'.$info['extension']);
+				$this->do_statement($statement, $image, 'Erreur dans la requete',
+					$image['name'].' inseree');
+			}
+		}
+	}
 }

@@ -5,8 +5,8 @@
 			</div>
 			<ul>
 <?php
-				foreach($imgs as $img) {
-					echo '<li><img src="'.$img['path'].'" /></li>';
+				foreach($h_list as $elem) {
+					echo '<li><img src="'.$elem['path'].'" /></li>';
 				}
 ?>
 			</ul>

@@ -1,12 +1,16 @@
 <body>
-	<center><h1>Installation du site</h1></center>
 	<section>
-		<center><h3>Félicitation l'installation est terminée</h3></center>
-		<div class="container">
-		<a href=<?=$this->url_base?>>
-		<span class="button inline right">Home</span>
-		</a>
+	<center><h1>Installation du site 3/3</h1></center>
+	<div class ="container">
+		<div class="center log">
+			<textarea readonly><?php echo $log; ?></textarea>
+		</div>
 	</div>
 	</section>
+	<div class="container">
+		<a href=<?=$this->url_base.'/install/_4'?>>
+		<span class="button inline right">Suivant</span>
+		</a>
+	</div>
 </body>
 </html>

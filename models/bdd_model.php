@@ -41,6 +41,16 @@ class Bdd {
 		return ($this->do_query($query, $err_log, $succ_log));
 	}
 
+# Insert an image in the BDD. Informations are contained in tab $image.
+
+	public function insert_image($image) {
+		$query = 
+			'INSERT into images id_user, type, name, path, date
+			VALUES (:id_user, :type, :name, :path, NOW())';
+		$this->do_statement($query, $image);
+		return($this->last_statement_return);
+	}
+
 # Insert a envent in the BDD.
 
 	public function insert_event($ti, $ca, $co, $li, $da, $de, $pu) {
@@ -76,20 +86,6 @@ class Bdd {
 		return ($this->do_statement($query));
 	}
 
-# Formated request to get all information on events for display.
-
-	public function get_events() {
-		$query =
-		'SELECT titre, lieu, categorie, em_comites.name AS comite, 
-		DAY(date) AS jour, MONTHNAME(date) AS mois, 
-		DATE_FORMAT(date, \'%Hh%i\') AS heure, description, publique
-		FROM em_events
-		INNER JOIN em_comites
-		ON em_comites.id = em_events.comite_id
-		WHERE DATE(date) >= CURRENT_DATE()
-		ORDER BY date';
-		return ($this->do_statement($query));
-	}
 
 # Execute a query, update the $log.
 

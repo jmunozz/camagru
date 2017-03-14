@@ -6,7 +6,7 @@
 
 <?php
 	//print_r($images);
-	foreach($images as $image) {
+	foreach($gallery as $image) {
 ?>
 		<div id="<?php echo $image['img_id']; ?>" class="container column img">
 			<div class="opac">

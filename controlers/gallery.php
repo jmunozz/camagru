@@ -84,9 +84,9 @@ Class Gallery {
 	}
 
 	public function display() {
-		$images = $this->model->get_all_images();
-		$images = $this->model->transform_null($images);
-		include ('views/head.php');
+		$gallery = $this->model->get_all_images();
+		$gallery = $this->model->transform_null($gallery);
+				include ('views/head.php');
 		include ('views/header.php');
 		include ('views/gallery.php');
 		include ('views/footer.php');

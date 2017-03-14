@@ -25,6 +25,16 @@ Class Gallery_model {
 		return ($this->bdd_obj->do_statement($query));
 	}
 
+	public function get_all_filters($id_user) {
+		$query = 
+			'SELECT * FROM images
+			WHERE type = 2
+			AND (id_user = 0 OR id_user = :id_user)';
+		$args = array('id_user' => $id_user);
+		return ($this->bdd_obj->do_statement($query, $args));
+	}
+
+
 	public function get_user_likes($id_user) {
 		$query = "SELECT id_image FROM likes WHERE id_user = :id_user";
 		$args = array('id_user' => $id_user);

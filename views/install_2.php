@@ -1,6 +1,6 @@
 <body>
 	<section>
-		<center><h1>Installation du site 2/2</h1></center>
+		<center><h1>Installation du site 2/3</h1></center>
 		<div class="container">
 		<form method="post" 
 		action=<?=$this->url_base.'/install/_2'?>>

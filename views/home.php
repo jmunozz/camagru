@@ -7,8 +7,9 @@
 			<div id="camera-menu" class="container column j-center">
 				<img id="activate_cam" src="assets/img/play.png" />
 				<img id="take-picture" src="assets/img/camera.png" />
+				<img id="send" src="assets/img/upload.png" />
 				<label for="file">
-					<img id="activate_file" src="assets/img/upload.png" />
+					<img id="activate_file" src="assets/img/dots.png" />
 				</label>
 				<input type="file" id="file">
 			</div>
@@ -26,6 +27,21 @@ include ('views/v-list.php');
 		</div>
 	</div>
 </div>
+<script>
+
+	var url_base = document.URL.split('/')[3];
+
+	function includeJs(file) {
+		script = document.createElement("script");
+		script.setAttribute('src', file);
+		script.setAttribute('type', 'text/javascript');
+		document.body.appendChild(script);
+	}
+
+	includeJs('assets/js/send.js');
+
+
+</script>
 <script>
 
 function previewImage() {
