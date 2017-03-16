@@ -25,14 +25,14 @@
 	width:100px;
 }
 
-.elem:nth-child(1) {
+#_2 {
 	background-color:yellow;
 }
 
-.elem:nth-child(2) {
+#_3 {
 	background-color:blue;
 }
 
-.elem:nth-child(3) {
+#_4 {
 	background-color:red;
 }

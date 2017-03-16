@@ -1,27 +1,4 @@
-<!doctype html>
-<html>
-	<head>
-		<link rel="stylesheet" href="test.css" />
-	</head>
-	<body>
-		<div>
-			<input id="plus" type='button' value="plus"/>
-			<input id="moins" type='button' value="moins"/>
-	</div>
-		<div id='tab' class="test">
-		</div>
-		<div class='menu'>
-			<div id='_2' class='elem' draggable="true"></div>
-			<div id='_3' class='elem' draggable="true"></div>
-			<div id='_4' class='elem' draggable="true"></div>
-		</div>
-	</body>
-
-<script>
-
-
-
-function SetFilters(container, elems) {
+function SetFilters(container, elems, sizeUp, sizeDown) {
 
 	var ElemOnCount = 0;
 	var ElemOnDrag = null;
@@ -106,11 +83,12 @@ function SetFilters(container, elems) {
 			{
 			'height':style.getPropertyValue('height'),
 			'width':style.getPropertyValue('width'),
-			'background-color':style.getPropertyValue('background-color'),
+			'background-image': 'url(' + elem.src + ')',
 			'position':'absolute'
 			}
 		);
 		newElem.draggable = true;
+		newElem.classList.add('cloned');
 		newElem.id = 'on_' + ElemOnCount++;
 		dragElem(newElem);
 		selectElem(newElem);
@@ -119,17 +97,12 @@ function SetFilters(container, elems) {
 
 	function dragElem(elem) {
 		elem.addEventListener('dragstart', function(e) {
-		console.log(e);
 		ElemOnDrag =
-		{
-			'id':e.target.id,
-			'offsetX':e.offsetX,
-			'offsetY':e.offsetY
-		};
-		e.dataTransfer.setData('text', e.target.id);
-		});
-		elem.addEventListener('drop', function(e) {
-			e.preventDefault;
+			{
+				'id':e.target.id,
+				'offsetX':e.offsetX,
+				'offsetY':e.offsetY
+			};
 		});
 	}
 
@@ -145,36 +118,37 @@ function SetFilters(container, elems) {
 			e.preventDefault();
 		});
 
-		container.addEventListener('drop', function(e) {
-			console.log(e);
+		function dropOnContainer(e) {
 			e.preventDefault();
-			if (ElemOnDrag) { 
-				var elem = document.getElementById(ElemOnDrag.id);
-				if (elem.parentNode.id != 'tab') {
-					elem = cloneElement(elem);
-					this.appendChild(elem);
-				}
-				var offset = e.dataTransfer.getData('offset');
-				console.log(ElemOnDrag);
-				elem.style.left = (e.clientX - ElemOnDrag.offsetX) + 'px';
-				elem.style.top = (e.clientY - ElemOnDrag.offsetY) + 'px';
-				ElemOnDrag = null;
+			console.log(e);
+			if (!ElemOnDrag)
+				return;
+			var elem  = document.getElementById(ElemOnDrag.id);
+			if (elem.parentNode.id != container.id) {
+				elem = cloneElement(elem);
+				this.appendChild(elem);
 			}
-		});
+			var offset = e.dataTransfer.getData('offset');
+			console.log(ElemOnDrag);
+			elem.style.left = (e.offsetX - ElemOnDrag.offsetX) + 'px';
+			elem.style.top = (e.offsetY - ElemOnDrag.offsetY) + 'px';
+			ElemOnDrag = null;
+		}	
+		
+		container.addEventListener('drop', dropOnContainer);
 	}
 	
-	var plus = document.getElementById('plus');
-	var moins = document.getElementById('moins');
 
-	setResize(plus, moins);
-	setContainer(container);
+
+	setResize(sizeUp, sizeDown);
 	setElems();
+	setContainer(container);
 	window.addEventListener('keydown', deleteElem);
 }
 
-var container  = document.body.children[1];
-var elems = document.getElementsByClassName('elem');
-SetFilters(container, elems);
-
-</script>
-</html>
+var sizeUp = document.getElementById('sizeUp');
+var sizeDown = document.getElementById('sizeDown');
+var container = document.getElementById('camera');
+var elems = document.getElementsByClassName('filters');
+console.log(sizeUp, sizeDown, container, elems);
+SetFilters(container, elems, sizeUp, sizeDown);

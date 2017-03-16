@@ -159,6 +159,9 @@ p.red {
 #camera {
 	width:90%;
 	position:relative;
+	overflow:hidden;
+	border-radius:50px;
+	border:solid black 1px;
 }
 
 #camera-menu {
@@ -280,4 +283,9 @@ canvas {
 	white-space:wrap;
 	background-color:white;
 	padding:10px;
+}
+
+.cloned {
+	background-repeat:no-repeat;
+	background-size:100% 100%;
 }
