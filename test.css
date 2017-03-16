@@ -1,0 +1,38 @@
+.test {
+	height:500px;
+	width:500px;
+	background-color:black;
+	position:relative;
+	overflow:hidden;
+}
+
+.subdiv {
+	height:100px;
+	width:100px;
+	background-color:yellow;
+	position:absolute;
+	top:-5px;
+	left:0px;
+}
+
+.menu {
+	display:flex;
+	height:100px;
+}
+
+.elem {
+	height:100px;
+	width:100px;
+}
+
+.elem:nth-child(1) {
+	background-color:yellow;
+}
+
+.elem:nth-child(2) {
+	background-color:blue;
+}
+
+.elem:nth-child(3) {
+	background-color:red;
+}

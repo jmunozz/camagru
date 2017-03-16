@@ -45,25 +45,30 @@ function sendRequest (type, request, callback) {
 	request();
 };
 
-//Take a tab and transform it into a formData object.
+//Take an object and transform it into a formData object.
 
 function getFormData(args) {
-	var data = new formData();
-	for (var i = 0 ; i < args.length ; i++) {
-		data.args[i]
-	}
+	if (typeof args != 'object')
+		return null;
+	var data = new FormData();
+	var keys = Object.keys(args);
+	keys.forEach(function(keys) {
+	console.log(keys);
+		data.append(keys, args[keys]);
+	});
+	return(data);
+}
 
 
 function setRequest(method, path, args) {
 	return function() {
 		if (method == "POST") {
 			xhr.open(method, path, true);
-			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-			xhr.send(args)
+			xhr.send(getFormData(args))
 		}
 		else {
 			xhr.open(method, path + '?' + args, true);
-			xhr.send(args);
+			xhr.send(getFormData(args));
 		}
 	};
 };

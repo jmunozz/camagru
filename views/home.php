@@ -91,11 +91,14 @@ function previewImage() {
 			var video = document.createElement("video");
 			var preview = document.createElement("img");
 			var canvas = document.createElement("canvas");
+			var test = document.createElement('div');
+			test.setAttribute('class', 'test');
 
 			video.setAttribute("id", "video");
 			preview.setAttribute("id", "preview");
 			canvas.setAttribute("id", "canvas");
 			camera.append(video);
+			camera.append(test);
 			camera.append(preview);
 			camera.append(canvas);
 		}
@@ -103,7 +106,7 @@ function previewImage() {
 		function activateCamera() {
 
 			navigator.getMedia = (navigator.getUserMedia || 
-			navigator.webkitGetUserMedia || navigator.mozGetUserMedia ||
+					navigator.webkitGetUserMedia || navigator.mozGetUserMedia ||
 			navigator.msGetUserMedia);
 
 			navigator.getMedia({video: true, audio: false}, function(stream) {

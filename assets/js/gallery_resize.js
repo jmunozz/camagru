@@ -24,7 +24,7 @@ function Resize_control() {
 }
 
 function likeSetup() {
-	sendRequest("XML", setRequest('POST', 'gallery/get_user_likes', 'get_user_likes=ok'),
+	sendRequest("XML", setRequest('POST', 'gallery/get_user_likes', {'get_user_likes':'ok'}),
 	function(response) {
 		var imgs = response.getElementsByTagName('like')[0].children;
 		for (var i = 0; i < imgs.length; i++) {
@@ -40,7 +40,7 @@ function like() {
 	likes[i].addEventListener("click", function() {
 			var like = this;
 			sendRequest("text", setRequest('POST', 'gallery/like',
-			'id_image=' + this.parentNode.parentNode.parentNode.id),
+			{'id_image': this.parentNode.parentNode.parentNode.id}),
 			function(response) {
 				if (response == 'add') {
 					like.parentNode.children[0].innerHTML =
@@ -64,7 +64,7 @@ function comment() {
 		console.log(ev.charCode);
 		if (ev.charCode == 13) {
 			sendRequest('XML', setRequest('POST', 'gallery/add_comment',
-			'id_image=' + image.id + '&text=' + input.value), function (response) {
+			{'id_image':image.id, 'text':input.value}), function (response) {
 				if (response) {
 					var com = com_obj_to_dom(xml_to_com_obj(
 					response.getElementsByTagName('comment')[0]));
@@ -133,7 +133,7 @@ function comment() {
 
 		e.preventDefault();
 		sendRequest('XML', setRequest('POST', 'gallery/get_comments',
-		'id_image=' + image.id), function (response) {
+		{'id_image':image.id}), function (response) {
 			var div_comment = add_div_comment(image);
 			var tab = response.getElementsByTagName('comment');
 			for (var i = 0; i < tab.length; i++) {

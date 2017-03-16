@@ -17,8 +17,12 @@ Class Gallery {
 
 	public function get_user_likes() {
 		if (!isset($_SESSION['user_id']) || !$_SESSION['user_id'] ||
-		!isset($_POST['get_user_likes']) || $_POST['get_user_likes'] !== 'ok')
+		!isset($_POST['get_user_likes']) || $_POST['get_user_likes'] !== 'ok') {
+			print_r($_POST);
+			echo ($_POST['get_user_likes']);
+			echo ('aaaaaa'.$_POST[1]);
 			$this->display();
+		}
 		else
 		{
 			$likes = $this->model->get_user_likes($_SESSION['user_id']);
