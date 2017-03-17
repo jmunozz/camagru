@@ -26,5 +26,20 @@ Class Home {
 			include('views/footer.php');
 		}
 	}
+
+	public function sendPicture() {
+		include ('models/home_model.php');
+		$model = new Home_model();
+		echo $this->url_base;
+		echo 'assets/gallery/imgtest.pmg';
+		$tmp = $model->getTempImage($_POST['img']);
+		$filters = $model->extractFilters($_POST);
+		print_r($filters);
+		foreach($filters as $filter) {
+			$obj = json_decode($filter);
+			$model->copyFilterIntoImage($tmp, $obj);
+		}
+		$model->saveImage($tmp);
+	}
 }
 ?>

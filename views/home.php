@@ -33,6 +33,7 @@ include ('views/v-list.php');
 <script>
 
 var url_base = document.URL.split('/')[3];
+console.log(url_base);
 
 function includeJs(file) {
 	script = document.createElement("script");
@@ -46,6 +47,8 @@ includeJs('assets/js/ajax.js');
 
 </script>
 <script>
+
+var ratio;
 
 function previewImage() {
 
@@ -95,13 +98,15 @@ function convertDivtoImg(filterTab)
 	var filterTabImg = [];
 
 	var img;
+	console.log(ratio);
 	filterTab.forEach(function(elem){
 		img = {};
-		img.height = elem.style.height.slice(0, -2);
-		img.width = elem.style.width.slice(0, -2);
+		img.height = elem.style.height.slice(0, -2) * ratio;
+		img.width = elem.style.width.slice(0, -2) * ratio;
 		img.src = elem.style.getPropertyValue('background-image').slice(5).slice(0, -2);
-		img.y = elem.style.getPropertyValue('top').slice(0, -2);
-		img.x = elem.style.getPropertyValue('left').slice(0, -2);
+		img.src = img.src.slice(img.src.lastIndexOf('/') + 1);
+		img.y = elem.style.getPropertyValue('top').slice(0, -2) * ratio;
+		img.x = elem.style.getPropertyValue('left').slice(0, -2) * ratio;
 		filterTabImg.push(img);
 		console.log(img);
 	});
@@ -113,7 +118,7 @@ function convertDivtoImg(filterTab)
 function buildObjectSent(img, filters) {
 	var Object = {};
 	var i = 0;
-	Object.img = img.src;
+	Object.img = img.src.slice(img.src.indexOf(',') + 1);
 	filters.forEach(function(elem) {
 		Object['filter_' + i++] = JSON.stringify(elem);
 	});
@@ -179,6 +184,9 @@ function Video() {
 				var vendorURL = window.URL || window.webkitURL;
 				video.src = vendorURL.createObjectURL(stream);
 			}
+			video.addEventListener('play', function() {
+				console.log('width', video.videoHeight, video.clientWidth);
+			});
 			video.play();
 		}, function(err) {
 			console.log("An error occured! " + err);
@@ -220,6 +228,7 @@ function Video() {
 	}
 
 	function takepicture() {
+		ratio = video.videoWidth / video.clientWidth;
 		canvas.width = video.videoWidth;
 		canvas.height = video.videoHeight;
 		canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -242,6 +251,7 @@ function Video() {
 		camera.removeChild(camera.children[1]);
 		camera.removeChild(camera.children[0]);
 		pic_button.removeEventListener('click', takepicture);
+		ratio = null;
 	}
 
 	function removeImage() {
