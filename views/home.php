@@ -41,7 +41,7 @@ function includeJs(file) {
 	document.body.appendChild(script);
 }
 
-includeJs('assets/js/send.js');
+includeJs('assets/js/ajax.js');
 
 
 </script>
@@ -96,11 +96,43 @@ function convertDivtoImg(filterTab)
 
 	var img;
 	filterTab.forEach(function(elem){
-		img = new Image(elem.style.height, elem.style.width);
+		img = {};
+		img.height = elem.style.height.slice(0, -2);
+		img.width = elem.style.width.slice(0, -2);
 		img.src = elem.style.getPropertyValue('background-image').slice(5).slice(0, -2);
+		img.y = elem.style.getPropertyValue('top').slice(0, -2);
+		img.x = elem.style.getPropertyValue('left').slice(0, -2);
 		filterTabImg.push(img);
+		console.log(img);
 	});
 	return filterTabImg;
+}
+
+// take 
+
+function buildObjectSent(img, filters) {
+	var Object = {};
+	var i = 0;
+	Object.img = img.src;
+	filters.forEach(function(elem) {
+		Object['filter_' + i++] = JSON.stringify(elem);
+	});
+	console.log(Object);
+	return Object;
+}
+
+function AddPictureGallery() {
+}
+
+function sendPicture() {
+
+	var img = document.getElementById('preview');
+	var imgFilters = convertDivtoImg(getFilterTab());
+	var files = buildObjectSent(img, imgFilters);
+	sendRequest('text', setRequest('POST', 'home/sendPicture', files),
+	AddPictureGallery);
+	console.log(img);
+	console.log(imgFilters);
 }
 
 
@@ -113,6 +145,10 @@ function Video() {
 	var canvas;
 	var preview;
 	var is_stream = false;
+
+	function clearCanvas() {
+		canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+	}
 
 	function setVideo() {
 		var video = document.createElement("video");
@@ -149,7 +185,31 @@ function Video() {
 		});
 	}
 
+	function getValidate(bar) {
+		var validate = document.createElement('img');
+		validate.src = 'assets/img/validate.png';
+		validate.addEventListener('click', sendPicture);
+		bar.appendChild(validate);
 
+	}
+
+	function getCancel(bar) {
+		var cancel = document.createElement('img');
+		cancel.src = 'assets/img/cancel.png';
+		bar.appendChild(cancel);
+		
+	}
+
+	function getValidateBar() {
+		var bar = document.createElement('div');
+		bar.setAttribute('class', 'container j-center');
+		bar.setAttribute('id', 'validate_bar');
+		getValidate(bar);
+		getCancel(bar);
+		camera.appendChild(bar);
+	}
+
+// Draw each filters on the canvas. (Not used).
 
 	function  drawFilters() {
 		var filters = convertDivtoImg(getFilterTab());
@@ -163,9 +223,9 @@ function Video() {
 		canvas.width = video.videoWidth;
 		canvas.height = video.videoHeight;
 		canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-		drawFilters();
 		var data = canvas.toDataURL('image/png');
 		preview.setAttribute('src', data);
+		getValidateBar();
 	}
 
 	function addVideo() {
