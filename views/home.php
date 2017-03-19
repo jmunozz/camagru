@@ -35,6 +35,8 @@ include ('views/v-list.php');
 var url_base = document.URL.split('/')[3];
 console.log(url_base);
 
+
+
 function includeJs(file) {
 	script = document.createElement("script");
 	script.setAttribute('src', file);
@@ -49,6 +51,14 @@ includeJs('assets/js/ajax.js');
 <script>
 
 var ratio;
+
+function intoArray(something) {
+	var array = [];
+	for(var i = 0; i < something.length; i++) {
+		array.push(something[i]);
+	}
+	return array;
+}
 
 function previewImage() {
 
@@ -115,10 +125,11 @@ function convertDivtoImg(filterTab)
 
 // take 
 
-function buildObjectSent(img, filters) {
+function buildObjectSent(img, filters, name) {
 	var Object = {};
 	var i = 0;
 	Object.img = img.src.slice(img.src.indexOf(',') + 1);
+	Object.name = name;
 	filters.forEach(function(elem) {
 		Object['filter_' + i++] = JSON.stringify(elem);
 	});
@@ -133,11 +144,21 @@ function sendPicture() {
 
 	var img = document.getElementById('preview');
 	var imgFilters = convertDivtoImg(getFilterTab());
-	var files = buildObjectSent(img, imgFilters);
+	var name = document.getElementById('name_bar').children[0].value;
+	var files = buildObjectSent(img, imgFilters, name);
 	sendRequest('text', setRequest('POST', 'home/sendPicture', files),
 	AddPictureGallery);
-	console.log(img);
-	console.log(imgFilters);
+	resetImage();
+}
+
+function resetImage() {
+
+	var c_child = intoArray(document.getElementById('camera').children);
+	c_child.forEach(function(elem) {
+		if (elem.tagName == 'DIV' || elem.tagName == 'IMG') {
+			elem.parentNode.removeChild(elem);
+		}
+	});
 }
 
 
@@ -148,7 +169,6 @@ function Video() {
 	var pic_button = document.getElementById('take-picture');
 	var video;
 	var canvas;
-	var preview;
 	var is_stream = false;
 
 	function clearCanvas() {
@@ -157,15 +177,12 @@ function Video() {
 
 	function setVideo() {
 		var video = document.createElement("video");
-		var preview = document.createElement("img");
 		var canvas = document.createElement("canvas");
 		var test = document.createElement('div');
 		test.setAttribute('class', 'test');
 
 		video.setAttribute("id", "video");
-		preview.setAttribute("id", "preview");
 		canvas.setAttribute("id", "canvas");
-		camera.prepend(preview);
 		camera.prepend(video);
 		camera.append(canvas);
 	}
@@ -204,6 +221,7 @@ function Video() {
 	function getCancel(bar) {
 		var cancel = document.createElement('img');
 		cancel.src = 'assets/img/cancel.png';
+		cancel.addEventListener('click', resetImage);
 		bar.appendChild(cancel);
 		
 	}
@@ -214,6 +232,17 @@ function Video() {
 		bar.setAttribute('id', 'validate_bar');
 		getValidate(bar);
 		getCancel(bar);
+		camera.appendChild(bar);
+	}
+
+	function getNameBar() {
+		var bar = document.createElement('div');
+		var input = document.createElement('input');
+		bar.setAttribute('id', 'name_bar');
+		bar.setAttribute('class', 'container j-center');
+		input.setAttribute('type', 'text');
+		input.setAttribute('placeholder', 'Name');
+		bar.appendChild(input);
 		camera.appendChild(bar);
 	}
 
@@ -233,15 +262,22 @@ function Video() {
 		canvas.height = video.videoHeight;
 		canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
 		var data = canvas.toDataURL('image/png');
+		var preview = document.createElement("img");
 		preview.setAttribute('src', data);
+		preview.setAttribute("id", "preview");
+		var f = camera.children[1];
+		if (f)
+			camera.insertBefore(preview, f);
+		else
+			camera.append(preview);
 		getValidateBar();
+		getNameBar();
 	}
 
 	function addVideo() {
 		setVideo();
 		video = document.querySelector('#video');
 		canvas = document.querySelector('#canvas');
-		preview = document.querySelector('#preview');
 		activateCamera();
 		pic_button.addEventListener('click', takepicture);
 	}

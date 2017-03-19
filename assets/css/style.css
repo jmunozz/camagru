@@ -167,6 +167,18 @@ p.red {
 	width:50px;
 }
 
+#name_bar {
+	height:15px;
+	width:100%;
+	position:absolute;
+	top:0;
+}
+
+#name_bar > input {
+	placeholder:'Name';
+	width:150px;
+}
+
 #camera {
 	width:90%;
 	position:relative;

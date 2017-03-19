@@ -45,7 +45,7 @@ class Bdd {
 
 	public function insert_image($image) {
 		$query = 
-			'INSERT into images id_user, type, name, path, date
+			'INSERT into images (id_user, type, name, path, date)
 			VALUES (:id_user, :type, :name, :path, NOW())';
 		$this->do_statement($query, $image);
 		return($this->last_statement_return);

@@ -16,7 +16,7 @@
 				<span><?php echo $image['titre']; ?></span>
 				<span><small><? echo $image['user']; ?></small></span>
 			</div>
-			<img class="photo" src="<?php echo $this->url_base; ?>/assets/img/camera.png"/>
+			<img class="photo" src="<?php echo $this->url_base.'/'.$image['path'] ?>"/>
 			<div class="container icon">
 				<div class="container">
 					<span class="nb"><?php echo $image['nb_comment']; ?></span>
