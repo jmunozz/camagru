@@ -35,12 +35,15 @@ function SetFilters(container, elems, sizeUp, sizeDown) {
 
 	function deleteElem(e) {
 		e.preventDefault;
-		if (e.keyCode == 8) {
-			onSelectedElems(function(elem) {
-				console.log(elem);
-				delete SelectElem[elem.id];
-				elem.parentNode.removeChild(elem);
-			});
+		if (!document.getElementsByClassName('selected').length)
+		{	
+			if (e.keyCode == 8) {
+				onSelectedElems(function(elem) {
+					console.log(elem);
+					delete SelectElem[elem.id];
+					elem.parentNode.removeChild(elem);
+				});
+			}
 		}
 	}
 

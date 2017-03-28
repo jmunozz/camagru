@@ -11,6 +11,7 @@ $SET_TABLES =  'CREATE TABLE users (
 								login VARCHAR(255) NOT NULL,
 								pwd VARCHAR(255) NOT NULL,
 								email VARCHAR(255) NOT NULL,
+								code VARCHAR(255),
 								valid BOOLEAN DEFAULT 0);
 				CREATE TABLE images (
 								id INT PRIMARY KEY AUTO_INCREMENT,

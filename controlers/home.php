@@ -30,8 +30,22 @@ Class Home {
 	public function sendPicture() {
 		include ('models/home_model.php');
 		$model = new Home_model();
-		print_r($_POST);
-		$model->createImage($_POST);
+		$image = $model->createImage($_POST);
+		header('Content-Type: text/xml');
+		echo '<image>';
+		echo '<src>assets/gallery/img_'.$image[0].'.png</src>';
+		echo '<id>'.$image[1].'</id>';
+		echo '</image>';
 	}
+
+	public function deleteImage() {
+		include ('models/home_model.php');
+		$model = new Home_model();
+		if ($model->deleteImage($_POST['id'], $_SESSION['user_id']))
+			echo 'TRUE';
+		else
+			echo 'FALSE';
+	}
+
 }
 ?>

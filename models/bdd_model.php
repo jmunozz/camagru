@@ -29,16 +29,35 @@ class Bdd {
 
 # Insert a user in the BDD.
 
-	public function insert_user($nom, $pre, $mail, $pwd, $co, $dr) {
-		$co = ($co) ? "', '".$co : "";
-		$co_n = ($co) ? ", comite_id" : "";
+	public function insert_user($login, $pwd, $email, $code) {
 		$query =
-		"INSERT into em_users (nom, prenom, mail, pwd".$co_n.", droits, date)
-		VALUES ('".$nom."', '".$pre."', '".$mail."', '".$pwd.$co."', '".$dr."',
-		NOW())";
+		"INSERT into users (login, pwd, email, code)
+		VALUES ('".$login."', '".$pwd."', '".$email."', '".$code."')";
 		$err_log = 'Impossible d\'insérer l\'utilisateur';
 		$succ_log = 'L\'utilisateur a été inséré';
 		return ($this->do_query($query, $err_log, $succ_log));
+	}
+
+
+# Get id of last row inserted.
+
+	public function get_last_id() {
+		$query = 'SELECT @@identity';
+		return($this->do_statement($query));
+	}
+
+# Delete an image from id.
+
+	public function delete_image($id, $user_id) {
+		$query = 'DELETE FROM images WHERE id ='.$id.' AND id_user = '.$user_id;
+		return ($this->do_query($query, $id.' deleted', 'fail delete img'));
+	}
+
+# Get path of an image from id.
+
+	public function get_path_image($id) {
+		$query = 'SELECT path FROM images WHERE id='.$id;
+		return ($this->do_statement($query));
 	}
 
 # Insert an image in the BDD. Informations are contained in tab $image.

@@ -42,26 +42,5 @@
 				scroll[1].addEventListener("mouseover", addScrollRight);
 			}
 
-			var h_selected = null;
-
-			function setHSelected(new_selected) {
-			if (h_selected){
-				h_selected.classList.remove("selected");
-			}
-			h_selected = new_selected;
-			console.log(h_selected);
-			if (h_selected && !h_selected.classList.contains("selected"))
-				h_selected.classList.add("selected");
-			}
-
-			function addClick() {
-			var li = document.querySelectorAll(".h-list ul li");
-			console.log(li);
-			li.forEach(function(li) {
-			li.addEventListener("click", function() {
-			setHSelected(this);});
-			});
-			}
 			addScroll();
-			addClick();
 		</script>

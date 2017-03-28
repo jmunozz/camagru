@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-		<div class="v-list">
+		<div id='v-list'  class="v-list">
 			<div class="v-scroll">
 				<img  alt="" src="assets/img/scroll-top.png"/>
 			</div>
 			<ul>
 <?php
-				foreach($gallery as $img) {
-					echo '<li><img src="'.$img['path'].'" /></li>';
+				foreach($v_list as $img) {
+					echo '<li><img data-id="'.$img['img_id'].'" src="'
+					.$img['path'].'" /></li>';
 				}
 ?>
 			</ul>
@@ -44,24 +45,46 @@
 
 			var v_selected = null;
 
+			function del(e) {
+				e.prevenDefault;
+				e.stopPropagation;
+				if (e.keyCode == 8) {
+					var id = v_selected.children[0].getAttribute('data-id');
+					sendRequest('text', setRequest('POST', 'home/deleteImage',
+					{'id' : id}), function(response) {
+						if (response == 'TRUE') {
+							v_selected.parentNode.removeChild(v_selected);
+							v_selected = null;
+							window.removeEventListener('keydown', del);
+						}
+					});
+				}
+			}
+
 			function setVSelected(new_selected) {
-			if (v_selected){
+			if (new_selected.classList.contains('selected')) {
 				v_selected.classList.remove("selected");
+				v_selected = null;
+				window.removeEventListener('keydown', del);
+				return;
+			}
+			else if (v_selected) {
+				v_selected.classList.remove("selected");
+				window.removeEventListener('keydown', del);
 			}
 			v_selected = new_selected;
-			console.log(v_selected);
-			if (v_selected && !v_selected.classList.contains("selected"))
-				v_selected.classList.add("selected");
+			v_selected.classList.add("selected");
+			window.addEventListener('keydown', del);
 			}
 
 			function addClick() {
 			var li = document.querySelectorAll(".v-list ul li");
-			console.log(li);
 			li.forEach(function(li) {
 			li.addEventListener("click", function() {
 			setVSelected(this);});
 			});
 			}
+
 			addScroll();
 			addClick();
 		</script>

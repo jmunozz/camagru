@@ -147,9 +147,7 @@ function AddPictureGallery(response) {
 	img.setAttribute('src', src.innerHTML);
 	img.setAttribute('data-id', id.innerHTML);
 	li.appendChild(img);
-	v_list.children[1].prepend(li);
-	li.addEventListener("click", function() {
-	setVSelected(this);})
+	v_list.children[1].appendChild(li);
 
 }
 

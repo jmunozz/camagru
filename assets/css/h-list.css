@@ -25,12 +25,10 @@
 	height:100%;
 	display:inline-block;
 	transition: transform .4s ease-in-out;
-	filter:blur(1px);
 }
 
 .h-list ul li:hover {
 	transform:scale(1.2,1.2);
-	filter:blur();
 }
 
 .h-scroll{
@@ -43,7 +41,7 @@
 }
 
 .selected {
-	filter:drop-shadow(3px 3px 1px yellow) !important;
+	border: solid yellow 2px;
 }
 
 

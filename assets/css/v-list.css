@@ -20,13 +20,11 @@
 	width::100%;
 	display:block;
 	transition: transform .4s ease-in-out;
-	filter:blur(1px);
 	margin-bottom:10px;
 }
 
 .v-list ul li:hover {
 	transform:scale(1.2,1.2);
-	filter:blur();
 }
 
 .v-scroll{
@@ -39,7 +37,7 @@
 }
 
 .selected {
-	filter:drop-shadow(3px 3px 1px yellow) !important;
+	border: solid yellow 2px;
 }
 
 .v-list img {

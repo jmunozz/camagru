@@ -4,12 +4,14 @@ Class Home_model {
 	private $bdd_obj;
 	private $bdd;
 	private $img_id = null;
-	public $occ = 0;
+	private $bdd_id = null;
 
 	static public function user_is() {
 		if ($_SESSION['user_id'] && $_SESSION['droits'])
 			return ($_SESSION['droits']);
 	}
+
+# Return a random ID of 10 numbers.
 
 	private function getRandomId() {
 		$str = '';
@@ -18,7 +20,9 @@ Class Home_model {
 		}
 		return($str);
 	}
-	
+
+# get image value from $_POST. If not found, return null;
+
 	public function extractImage($tab) {
 		foreach($tab as $key => $value) {
 			if (!strcmp($key, 'img')){
@@ -27,6 +31,8 @@ Class Home_model {
 		}
 		return null;
 	}
+
+# get tab of filters from $_POST. If no filter, return empty tab.
 
 	public function extractFilters($tab) {
 		$filters = [];
@@ -38,13 +44,28 @@ Class Home_model {
 		return $filters;
 	}
 
-	public function resizeImage($height, $width) {}
+# call delete_image from bdd_model. Return TRUE or FALSE.
+
+	public function deleteImage($id, $user_id) {
+		require_once('models/bdd_model.php');
+		if (!($path = $this->bdd_obj->get_path_image($id))) 
+			return FALSE;
+		$path = $path[0][0];
+		if ($this->bdd_obj->delete_image($id, $user_id)) {
+			unlink($path);
+			return TRUE;
+		}
+		else
+			return FALSE;
+	}
+
 
 	public function saveImage($resource, $name) {
 		require_once('models/bdd_model.php');
-		echo $name;
 		$this->bdd_obj->insert_image(array('id_user' => $_SESSION['user_id'], 'type'
 		=> 1, 'name' => $name, 'path' => 'assets/gallery/img_'.$this->img_id.'.png'));
+		$id = $this->bdd_obj->get_last_id();
+		$this->bdd_id = $id[0][0];
 		imagepng($resource, 'assets/gallery/img_'.$this->img_id.'.png');
 		$this->freeImage($resource);
 		$this->removeTempImage();
@@ -55,35 +76,26 @@ Class Home_model {
 	}
 
 	public function getTempImage($img) {
-		$this->occ++;
 		$data = base64_decode($img);
 		$img_id = $this->getRandomId();
 		$ret = file_put_contents('assets/gallery/tmp_'.$img_id.'.png', $data);
-		echo $ret;
-		echo mime_content_type('assets/gallery/tmp_'.$img_id.'.png');
 		$this->img_id = $img_id;
 	}
 
 	public function removeTempImage() {
 		unlink('assets/gallery/tmp_'.$this->img_id.'.png');
-		$this->img_id = NULL;
 	}
 
-#copy filter into resource image and reisze.
+# Copy filter into resource image and reisze.
 
 	public function copyFilterIntoImage($img, $filter_obj) {
 
 		$filter = imagecreatefrompng('assets/gallery/filters/'.$filter_obj->src);
-		echo (imagesy($img));
-
 		$f_height = imagesy($filter);
 		$f_width = imagesx($filter);
-		if (!imagecopyresampled($img, $filter, $filter_obj->x, $filter_obj->y, 0, 0,
-			round($filter_obj->width), round($filter_obj->height), 
-			$f_width, $f_height))
-			echo 'ECHEC';
-		else
-			echo 'SUCCESS';
+
+		imagecopyresampled($img, $filter, $filter_obj->x, $filter_obj->y, 0, 0,
+		round($filter_obj->width), round($filter_obj->height), $f_width, $f_height);
 	}
 
 	public function createImage($tab) {
@@ -91,7 +103,6 @@ Class Home_model {
 		$image_data = $tab['img'];
 		$filters = $this->extractFilters($tab);
 		$name = isset($tab['name']) ? $tab['name'] : 'Inconnu';
-		echo 'name'.$name;
 
 		$this->getTempImage($image_data);
 		$image = imagecreatefrompng('assets/gallery/tmp_'.$this->img_id.'.png');
@@ -100,7 +111,6 @@ Class Home_model {
 			$this->copyFilterIntoImage($image, $obj);
 		}
 		$this->saveImage($image, $name);
-		echo 'occ:'.$this->occ;
+		return (array($this->img_id, $this->bdd_id));
 	}
-
 }
