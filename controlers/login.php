@@ -66,10 +66,47 @@ Class Login {
 		header('Location: '.$this->url_base);
 	}
 
+	public function init() {
+		$success = NULL;
+		require_once('models/bdd_model.php');
+		if (!isset($_POST['mail']))
+			;
+		else if (!$_POST['mail']) 
+			$this->_data = 'Le champ mail est vide';
+		else if (!($user = $this->bdd_obj->get_elem_by('users', 'email', 
+		$_POST['mail']))) 
+			$this->_data = 'Cette adresse mail est invalide';
+		else {
+			$code = uniqid('');
+			echo $code;
+			if (!$this->bdd_obj->update_user($user[0]['id'], 'code', $code))
+				$this->_data = 'Opération impossible';
+			else {
+				require_once('models/Mail_model.php');
+				Mail::sendPwdCodeToUser($code , $user[0]['email'], $user[0]['login']);
+				$success = TRUE;
+			}
+		}
+		$this->init_view($success);
+		return;
+	}
+
 	public function view() {
 		include ('views/head.php');
 		include ('views/header.php');
 		include ('views/login.php');
+		include ('views/footer.php');
+	}
+
+	public function init_view($success) {
+		include ('views/head.php');
+		include ('views/header.php');
+		if (!$success)
+			include ('views/pwd_init.php');
+		else  {
+			$success_message = 'Un email vient de vous être envoyé';
+			include ('views/success.php');
+		}
 		include ('views/footer.php');
 	}
 }

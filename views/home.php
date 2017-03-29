@@ -7,7 +7,6 @@
 			<div id="camera-menu" class="container column j-center">
 				<img id="activate_cam" src="assets/img/play.png" />
 				<img id="take-picture" src="assets/img/camera.png" />
-				<img id="send" src="assets/img/upload.png" />
 				<label for="file">
 					<img id="activate_file" src="assets/img/dots.png" />
 				</label>
@@ -257,16 +256,6 @@ function Video() {
 		input.setAttribute('placeholder', 'Name');
 		bar.appendChild(input);
 		camera.appendChild(bar);
-	}
-
-// Draw each filters on the canvas. (Not used).
-
-	function  drawFilters() {
-		var filters = convertDivtoImg(getFilterTab());
-		console.log(filters);
-		filters.forEach(function(elem) {
-			canvas.getContext('2d').drawImage(elem, 0, 0, elem.width, elem.height);
-		});
 	}
 
 	function takepicture() {

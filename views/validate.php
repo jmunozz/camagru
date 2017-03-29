@@ -10,6 +10,8 @@
 				<?php if (!$mail) { ?>
 				<label class="block">Mail</label>
 				<input  type="text" name="mail" placeholder="ex:root@hotmail.com">
+				<?php } else {?>
+				<input  type="hidden"  name="mail" value="<?php echo $mail; ?>">
 				<?php } ?>
 				<label class="block">Code</label>
 				<input  type="text" name="code" placeholder="ex:3e9k089">

@@ -6,7 +6,7 @@
 			<ul>
 <?php
 				foreach($v_list as $img) {
-					echo '<li><img data-id="'.$img['img_id'].'" src="'
+					echo '<li><img data-id="'.$img['id'].'" src="'
 					.$img['path'].'" /></li>';
 				}
 ?>

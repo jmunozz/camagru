@@ -12,6 +12,10 @@
 				<label class="block">Mot de passe</label>
 				<input type="text" name="pwd" placeholder="ex:root">
 				<button class="link-button" type="submit" name="submit" value="1">Valider</button>
+				<a href="<?php echo $this->url_base.'/signin'; ?>">
+				<p>S'inscrire</p></a>
+				<a href="<?php echo $this->url_base.'/login/init'; ?>">
+				<p>Mot de passe oublié</p></a>
 			</form>
 		</div>
 	</section>

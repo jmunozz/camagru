@@ -51,7 +51,7 @@ Class Home_model {
 		if (!($path = $this->bdd_obj->get_path_image($id))) 
 			return FALSE;
 		$path = $path[0][0];
-		if ($this->bdd_obj->delete_image($id, $user_id)) {
+		if ($this->bdd_obj->delete_image(array('id' => $id, 'id_user' => $user_id))) {
 			unlink($path);
 			return TRUE;
 		}

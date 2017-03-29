@@ -41,21 +41,19 @@ Class Signin {
 		}
 		if (($i = 0) ||!Check::_field($login) || !(++$i) || !Check::_field($pwd) 
 		|| !(++$i) || !Check::_mail($email)) {
-			$_data = 'Le champ '.unserialize(ERROR_VALUES)[$i].' est invalide'.PHP_EOL;
+			$this->_data = 'Le champ '.unserialize(ERROR_VALUES)[$i].' est invalide'.PHP_EOL;
 			$this->defaut();
 			return;
 		}
-		if (!($already = $this->bdd_obj->get_table_field('users', 'email'))) {
-			$_data = 'Impossible de vérifier l\'existence de cette adresse'.PHP_EOL;
+		if ($this->isAlreadyUsed('email', $email)) {
+			$this->_data = 'Attention cette adresse mail est déjà utilisée'.PHP_EOL;
 			$this->defaut();
 			return;
 		}
-		foreach($already as $a) {
-			if ($a['email'] == $email) {
-				$this->_data = 'Attention cette adresse mail est déjà utilisée'.PHP_EOL;
-				$this->defaut();
-				return;
-			}
+		if ($this->isAlreadyUsed('login', $login)) {
+			$this->_data = 'Attention ce login est déjà utilisé'.PHP_EOL;
+			$this->defaut();
+			return;
 		}
 		if (!$this->createUser($email, $login, $pwd)) {
 			$this->_data = 'L\'inscription a échouée.'.PHP_EOL;
@@ -66,25 +64,20 @@ Class Signin {
 		return;
 	}
 
-	private function createUser($email, $login, $pwd) {
-		$code = $this->getRandomCode();
-		$this->sendCodeToUser($code, $email, $login);
-		return ($this->bdd_obj->insert_user($login, $pwd, $email, $code));		
+	private function isAlreadyUsed($field, $value) {
+		if (!$this->bdd_obj->get_elem_by('users', $field, $value))
+			return FALSE;
+		return TRUE;
 	}
 
-	private function sendCodeToUser($code, $email, $login) {
-		$objet = 'Camagru: Validation de votre compte';
-		$body = '<h1>Félicitations '.$login.' pour ton inscription !</h1>';
-		$body .= '<p>Ton code de validation est : '.$code.' .</p>';
-		$body .= '<br /> ';
-		$body .= '<p>Tu peux valider directement ton inscription à cette adresse: ';
-		$body .= $_SERVER['HTTP_HOST'].$this->url_base.'/validate?mail='.$email.'&code='.$code.'</p>';
-		$headers = "MIME-Version: 1.0" . "\r\n";
-	    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\b";
-		$headers .= 'From: Camagru';
-		if (!mail($email, $objet, $body, $headers))
-			echo 'mail cant be delivered to '.$email;
+	private function createUser($email, $login, $pwd) {
+		require_once('models/Mail_model.php');
+		$code = $this->getRandomCode();
+		Mail::init($this->url_base);
+		Mail::sendCodeToUser($code, $email, $login);
+		return ($this->bdd_obj->insert_user($login, hash('whirlpool', $pwd), $email, $code));		
 	}
+
 
 	private function getRandomCode() {
 		return uniqid('');

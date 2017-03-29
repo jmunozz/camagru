@@ -16,7 +16,7 @@ Class Home {
 		{
 			include ('models/gallery_model.php');
 			$gallery_model = new Gallery_model($this->url_base);
-			$gallery = $gallery_model->get_all_images();
+			$gallery = $gallery_model->get_user_images($_SESSION['user_id']);
 			$filters = $gallery_model->get_all_filters($_SESSION['user_id']);
 			$h_list = $filters;
 			$v_list = $gallery;

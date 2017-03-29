@@ -33,11 +33,19 @@ class Bdd {
 		$query =
 		"INSERT into users (login, pwd, email, code)
 		VALUES ('".$login."', '".$pwd."', '".$email."', '".$code."')";
-		$err_log = 'Impossible d\'insérer l\'utilisateur';
-		$succ_log = 'L\'utilisateur a été inséré';
+		$err_log = 'impossible d\'insérer l\'utilisateur';
+		$succ_log = 'l\'utilisateur a été inséré';
 		return ($this->do_query($query, $err_log, $succ_log));
 	}
 
+# Update some user field  in the BDD by id.
+
+	public function update_user($id, $field, $value) {
+
+	$query = 'UPDATE users SET '.$field.'=\''.$value.'\' WHERE id='.$id;
+	$this->do_statement($query);
+	return($this->last_statement_return);
+	}
 
 # Get id of last row inserted.
 
@@ -48,9 +56,10 @@ class Bdd {
 
 # Delete an image from id.
 
-	public function delete_image($id, $user_id) {
-		$query = 'DELETE FROM images WHERE id ='.$id.' AND id_user = '.$user_id;
-		return ($this->do_query($query, $id.' deleted', 'fail delete img'));
+	public function delete_image($args) {
+		$query = 'DELETE FROM images WHERE id = :id AND id_user = :id_user';
+		$this->do_statement($query, $args);
+		return($this->last_statement_return);
 	}
 
 # Get path of an image from id.
@@ -70,19 +79,6 @@ class Bdd {
 		return($this->last_statement_return);
 	}
 
-# Insert a envent in the BDD.
-
-	public function insert_event($ti, $ca, $co, $li, $da, $de, $pu) {
-
-		$query =
-		"INSERT into em_events
-		(titre, lieu, categorie, comite_id, date, description, publique)
-		VALUES (".$ti.", ".$li.", ".$ca.",
-		'".$co."', '".$da."', ".$de.", '".$pu."')";
-		$err_log = 'Impossible d\'insérer l\'évènement';
-		$succ_log = 'L\'évènement '.$ti.' a été inséré';
-		return ($this->do_query($query, $err_log, $succ_log));
-	}
 
 # Give a table to the function and fields. Return their values or NULL if a problem occurs.
 
@@ -94,6 +90,14 @@ class Bdd {
 			$field_str = $field_str.$fields[$i].', ';
 		$field_str = $field_str.$fields[$i];
 		$query = 'SELECT '.$field_str.' FROM '.$table;
+		return ($this->do_statement($query));
+	}
+
+# Give a table, a unique field and a value and retrieve the element.
+
+	public function get_elem_by($table, $field, $value) {
+
+		$query = 'SELECT * FROM '.$table.' WHERE '.$field.'=\''.$value.'\'';
 		return ($this->do_statement($query));
 	}
 
