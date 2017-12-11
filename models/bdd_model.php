@@ -42,9 +42,9 @@ class Bdd {
 
 	public function update_user($id, $field, $value) {
 
-	$query = 'UPDATE users SET '.$field.'=\''.$value.'\' WHERE id='.$id;
-	$this->do_statement($query);
-	return($this->last_statement_return);
+		$query = 'UPDATE users SET ' . $field . '=\'' . $value . '\' WHERE id=' . $id;
+		$this->do_statement($query);
+		return($this->last_statement_return);
 	}
 
 # Get id of last row inserted.
@@ -155,6 +155,8 @@ class Bdd {
 		return ($this->last_statement_return);
 	}
 }
+
+
 if (($this->bdd_obj = Bdd::get_instance()) == NULL) {
 	$this->bdd = NULL;
 }

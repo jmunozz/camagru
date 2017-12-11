@@ -5,38 +5,58 @@ Class Mail {
 	static public $url_base;
 
 	static public function init($url_base) {
-
 		self::$url_base = $url_base;
 	}
 
+	
+	/*
+	** Format Code Validation email and send to user.
+	*/
 	static public function sendCodeToUser($code, $email, $login) {
 
-		$objet = 'Camagru: Validation de votre compte';
-		$body = '<h1>Félicitations '.$login.' pour ton inscription !</h1>';
-		$body .= '<p>Ton code de validation est : '.$code.' .</p>';
-		$body .= '<br /> ';
-		$body .= '<p>Tu peux valider directement ton inscription à cette adresse: ';
-		$body .= $_SERVER['HTTP_HOST'].self::$url_base.'/validate?mail='.
-			$email.'&code='.$code.'</p>';
-		self::sendMail($email, $objet, $body);
+		$url = 	$_SERVER['HTTP_HOST'] . self::$url_base . '/validate?mail=' . $email . '&code=' . $code;
+
+		$subject = 	'Camagru: Validation de votre compte';
+
+		$body = 	'<h1>Félicitations ' . $login . ' pour ton inscription !</h1>' .
+					'<p>Ton code de validation est : '. $code .' .</p>' .
+					'<br /> ' .
+					'<p>Tu peux valider directement ton inscription à cette addresse:' .
+					' <a href="' . $url . '">' . $url . '</a></p>';
+
+
+		self::sendMail($email, $subject, $body);
 	}
 
+
+	/*
+	** Format Forgiven Password email and send to user.
+	*/ 
 	static public function sendPwdCodeToUser($code, $email, $login) {
-		$objet = 'Camagru: Ré-initialisation de votre mot de passe';
-		$body = '<p>Pour ré-initialiser votre mot de passe, cliquez sur le 
-		lien suivant</p>';
-		$body .= '<a href= "'.$_SERVER['HTTP_HOST'].self::$url_base.
-			'/validate/init?mail='.$email.'&code='.$code.'">ici</a>';
-		self::sendMail($email, $objet, $body);
+
+		$url = $_SERVER['HTTP_HOST'] . self::$url_base . '/validate/password_change?mail=' . $email . '&code=' . $code;
+
+		$subject =	'Camagru: Ré-initialisation de votre mot de passe';
+
+		$body = 	'<p>Pour ré-initialiser votre mot de passe, cliquez sur le lien suivant:</p>' .
+					'<a href= "'. $url . '">' . $url . '</a>';
+
+		self::sendMail($email, $subject, $body);
 	}
 
-	static public function sendMail($email, $objet, $body) {
+	
+	/*
+	** Take email address, subject, body and send email. Return Bool.
+	*/
+	static public function sendMail($email, $subject, $body) {
 
-		$headers = "MIME-Version: 1.0" . "\r\n";
-		$headers .= "Content-type:text/html;charset=UTF-8" . "\r\b";
-		$headers .= 'From: Camagru';
-		if (!mail($email, $objet, $body, $headers))
-			echo 'mail cant be delivered to '.$email;
+		// Headers must be separated by PHP_EOL.
+		$additional_headers = 
+			'MIME-Version: 1.0' . PHP_EOL .
+			'Content-type: text/html; charset=utf-8' . PHP_EOL .
+			'From: Camagru';
+
+		return mail($email, $subject, $body, $additional_headers);
 	}
 }
 

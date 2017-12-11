@@ -83,6 +83,7 @@ Class Login {
 				$this->_data = 'Opération impossible';
 			else {
 				require_once('models/Mail_model.php');
+				Mail::init($this->url_base);
 				Mail::sendPwdCodeToUser($code , $user[0]['email'], $user[0]['login']);
 				$success = TRUE;
 			}
