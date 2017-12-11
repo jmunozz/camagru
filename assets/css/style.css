@@ -232,6 +232,10 @@ filter:hue-rotate(70deg);
 	border-radius:50px;
 }
 
+#file_preview {
+
+}
+
 video {
 	width:100%;
 }

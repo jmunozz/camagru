@@ -49,7 +49,8 @@ includeJs('assets/js/ajax.js');
 </script>
 <script>
 
-var ratio;
+var ratio = null;
+var is_stream = false;
 
 function intoArray(something) {
 	var array = [];
@@ -67,10 +68,7 @@ function previewImage() {
 
 	function displayStandard() {
 		camera.children[0].src = 'assets/img/camera.png';
-	}
-
-	function displayBuffering() {
-		camera.children[0].src = 'assets/img/loading.gif';
+		camera.children[0].id = '';
 	}
 
 	function readFile() {
@@ -79,15 +77,17 @@ function previewImage() {
 			reader.addEventListener("load", displayImage);
 			reader.readAsDataURL(file);
 		}
-		displayStandard();
+		else 
+			displayStandard();
 	}
 
 	function displayImage(){
+		console.log(camera.children[0]);
 		camera.children[0].src = reader.result;
+		camera.children[0].id = 'file_preview';
 	}
 
 	file_contain.addEventListener("change", function() {
-		displayBuffering();
 		readFile();
 	});
 }
@@ -107,7 +107,6 @@ function convertDivtoImg(filterTab)
 	var filterTabImg = [];
 
 	var img;
-	console.log(ratio);
 	filterTab.forEach(function(elem){
 		img = {};
 		img.height = elem.style.height.slice(0, -2) * ratio;
@@ -152,9 +151,16 @@ function AddPictureGallery(response) {
 
 }
 
+function addDefaultImgFile() {
+	img = document.createElement('img');
+	img.src = 'assets/img/camera.png';
+	document.getElementById('camera').append(img);
+}
+
 function sendPicture() {
 
-	var img = document.getElementById('preview');
+	var img = is_stream ? document.getElementById('preview') :
+	document.getElementById('file_preview');
 	var imgFilters = convertDivtoImg(getFilterTab());
 	var name = document.getElementById('name_bar').children[0].value;
 	var files = buildObjectSent(img, imgFilters, name);
@@ -171,6 +177,8 @@ function resetImage() {
 			elem.parentNode.removeChild(elem);
 		}
 	});
+	if (!is_stream)
+		addDefaultImgFile();
 }
 
 
@@ -181,7 +189,6 @@ function Video() {
 	var pic_button = document.getElementById('take-picture');
 	var video;
 	var canvas;
-	var is_stream = false;
 
 	function clearCanvas() {
 		canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
@@ -259,19 +266,26 @@ function Video() {
 	}
 
 	function takepicture() {
-		ratio = video.videoWidth / video.clientWidth;
-		canvas.width = video.videoWidth;
-		canvas.height = video.videoHeight;
-		canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-		var data = canvas.toDataURL('image/png');
-		var preview = document.createElement("img");
-		preview.setAttribute('src', data);
-		preview.setAttribute("id", "preview");
-		var f = camera.children[1];
-		if (f)
-			camera.insertBefore(preview, f);
-		else
-			camera.append(preview);
+		var img_file;
+		if (is_stream) {
+			ratio = video.videoWidth / video.clientWidth;
+			canvas.width = video.videoWidth;
+			canvas.height = video.videoHeight;
+			canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+			var data = canvas.toDataURL('image/png');
+			var preview = document.createElement("img");
+			preview.setAttribute('src', data);
+			preview.setAttribute("id", "preview");
+			var f = camera.children[1];
+			if (f)
+				camera.insertBefore(preview, f);
+			else
+				camera.append(preview);
+		}
+		else if ((img_file = document.getElementById('file_preview'))) 
+			ratio = img_file.naturalHeight / img_file.clientHeight;
+		else 
+			return;
 		getValidateBar();
 		getNameBar();
 	}
@@ -281,19 +295,20 @@ function Video() {
 		video = document.querySelector('#video');
 		canvas = document.querySelector('#canvas');
 		activateCamera();
-		pic_button.addEventListener('click', takepicture);
 	}
 
 	function removeVideo() {
-		camera.removeChild(camera.children[2]);
-		camera.removeChild(camera.children[1]);
-		camera.removeChild(camera.children[0]);
-		pic_button.removeEventListener('click', takepicture);
-		ratio = null;
+		var children = intoArray(camera.children);
+		children.forEach(function(elem) {
+			camera.removeChild(elem);
+			});
 	}
 
 	function removeImage() {
-		camera.removeChild(camera.children[0]);
+		var children = intoArray(camera.children);
+		children.forEach(function(elem) {
+			camera.removeChild(elem);
+			});
 	}
 
 	function addImage() {
@@ -318,6 +333,10 @@ function Video() {
 			is_stream = true;
 		}
 	});
+
+
+	pic_button.addEventListener('click', takepicture);
+	
 }
 
 previewImage();
