@@ -2,6 +2,9 @@
 	<label>Pictures Size</label>
 	<input id="range" type="range" />
 </div>
+<div id="comments_sidebar">
+	<div class="comments_sidebar_title">Comments <img id="comments_sidebar_title_close" src="<?php echo $this->url_base; ?>/assets/img/cancel.png" /></div>
+</div>
 <div id="gallery">
 
 <?php
@@ -30,6 +33,8 @@
 		</div>
 <?php }
 ?>
+<div id="gallery_pagination">
+</div>
 <script>
 
 	var url_base = document.URL.split('/')[3];

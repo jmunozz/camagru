@@ -8,20 +8,30 @@ Class Gallery {
 		$this->url_base = $url_base;
 		require_once('models/gallery_model.php');
 		$this->model = new Gallery_model($url_base);
+		$this->PICTURES_PER_PAGE = 15;
 	}
 
 	public function index()  {
 		$this->display();
+	}
 
+	public function get_total_pages() {
+		if(!isset($_POST['total_pages']) || $_POST['total_pages'] !== 'ok') {
+			$this->display();
+		}
+		else {
+			$total_pictures = $this->model->get_total_pictures();
+			$total_pages = ceil($total_pictures / $this->PICTURES_PER_PAGE);
+			header('Content-Type: text/xml');
+			echo '<total_pages>' . $total_pages . '</total_pages>';
+		}
 	}
 
 	public function get_user_likes() {
 		if (!isset($_SESSION['user_id']) || !$_SESSION['user_id'] ||
 		!isset($_POST['get_user_likes']) || $_POST['get_user_likes'] !== 'ok') {
-			print_r($_POST);
-			echo ($_POST['get_user_likes']);
-			echo ('aaaaaa'.$_POST[1]);
-			$this->display();
+			header('Content-Type: text/xml');
+			echo '<like></like>';
 		}
 		else
 		{
@@ -39,7 +49,7 @@ Class Gallery {
 		if (!isset($_SESSION['user_id']) || !$_SESSION['user_id'] || !isset(
 			$_POST['id_image']) || !$_POST['id_image'] || !isset($_POST['text']) ||
 			!$_POST['text'])
-			$this->display();
+			echo 'skip';
 		else {
 			$ret = $this->model->add_comment($_SESSION['user_id'], 
 			$_POST['id_image'], $_POST['text']);
@@ -76,7 +86,7 @@ Class Gallery {
 	public function like() {
 		if (!isset($_SESSION['user_id']) || !$_SESSION['user_id'] || !isset(
 		$_POST['id_image']) || !$_POST['id_image'])
-			$this->display();
+			echo 'skip';
 		else
 		{
 			$ret = $this->model->add_like($_SESSION['user_id'],
@@ -84,13 +94,19 @@ Class Gallery {
 			echo $ret;
 		}
 	}
+	
 	public function comment() {
 	}
 
 	public function display() {
-		$gallery = $this->model->get_all_images();
+
+		$page = (isset($_GET['page'])) ? $_GET['page'] : 0;
+		if ($page < 0) $page = 0;
+
+		$gallery = $this->model->get_paginated_pictures($this->PICTURES_PER_PAGE, $page);
+		//$gallery = $this->model->get_all_images();
 		$gallery = $this->model->transform_null($gallery);
-				include ('views/head.php');
+		include ('views/head.php');
 		include ('views/header.php');
 		include ('views/gallery.php');
 		include ('views/footer.php');

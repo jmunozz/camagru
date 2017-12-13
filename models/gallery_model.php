@@ -25,6 +25,25 @@ Class Gallery_model {
 		return ($this->bdd_obj->do_statement($query));
 	}
 
+	/*
+	** Returns nb of pictures required.
+	*/
+	public function get_paginated_pictures($nb_per_page, $page) {
+		$index_to_slice = $nb_per_page * $page;		
+		$all_pictures = $this->get_all_images();
+		$paginated_pictures = array_slice($all_pictures, $index_to_slice, $index_to_slice + $nb_per_page);
+		return $paginated_pictures;
+	}
+
+	public function get_total_pictures() {
+		$query = "SELECT COUNT(*) FROM images";
+		$ret = $this->bdd_obj->do_statement($query);
+		if ($ret) {
+			return $ret[0][0];
+		}
+		else return $this->bdd_obj->last_statement_return();
+	}
+
 	public function get_all_filters($id_user) {
 		$query = 
 			'SELECT * FROM images

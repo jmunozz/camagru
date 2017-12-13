@@ -1,10 +1,23 @@
+/*
+** Transform an iterator into an array.
+*/
+function intoArray(something) {
+	var array = [];
+	for(var i = 0; i < something.length; i++) {
+		array.push(something[i]);
+	}
+	return array;
+}
+
+
+
+
 function Resize_control(range, images) {
 
 	if (images)
 		var orig_size = images[0].clientWidth;
 
 	var resize = function() {
-		console.log(range.value);
 		var i = -1;
 		while (++i < images.length) {
 				var size = orig_size * (2 * range.value / 100) + "px";
@@ -17,20 +30,30 @@ function Resize_control(range, images) {
 		range.addEventListener("mouseup", function() {
 		  range.removeEventListener("mousemove", resize);
 		  });
-		console.log(range.value);
 	});
 }
 
+
+/*
+** Get pictures liked for a user.
+*/
 function likeSetup() {
-	sendRequest("XML", setRequest('POST', 'gallery/get_user_likes', {'get_user_likes':'ok'}),
-	function(response) {
+
+
+	const callback = (response) => {
 		var imgs = response.getElementsByTagName('like')[0].children;
+		// All liked pictures heart are display in yellow.
 		for (var i = 0; i < imgs.length; i++) {
 			var elem = document.getElementById(imgs[i].id).children[3].children[1].children[1];
 			elem.src = 'assets/img/yellow_like.png';
 		}
-	});
+	};
+
+	sendRequest("XML", setRequest('POST', 'gallery/get_user_likes', {'get_user_likes':'ok'}), callback);
 }
+
+
+
 
 function like() {
 	var likes = document.querySelectorAll('.like');
@@ -58,8 +81,12 @@ function like() {
 
 function comment() {
 
+
+	let current_picture_comment_icon = null;
+	let current_picture = null;
+
 	function add_comment(ev, image, input, div_comment) {
-		console.log(ev.charCode);
+
 		if (ev.charCode == 13) {
 			sendRequest('XML', setRequest('POST', 'gallery/add_comment',
 			{'id_image':image.id, 'text':input.value}), function (response) {
@@ -76,9 +103,7 @@ function comment() {
 					
 				}
 				else {
-					alert(response);
-					console.log(image.id);
-					console.log(input);
+					alert('Please login to write comment');
 				}
 			});
 		}
@@ -101,8 +126,10 @@ function comment() {
 
 	function com_obj_to_dom(obj) {
 		p = document.createElement('p');
-		p.innerHTML = '<bold>' + obj.date + '</bold>' + 
-		'<br />' + obj.login + ':  ' + obj.text;
+		p.innerHTML = 
+		'<span class="comments_content_date">' + obj.date + '</span>' + 
+		'<br />' + '<span class="comments_content_author">' + obj.login + 
+		':  ' + '</span><span class="comments_content">' + obj.text + '</span>';
 		return (p);
 	}
 
@@ -117,47 +144,136 @@ function comment() {
 		return(input);
 	}
 
-	function remove_div_event(e, image, target) {
+	function close_comments_sidebar(e) {
+
 		e.preventDefault;
-		if (image.querySelector('.div_comment'))
-			image.removeChild(image.querySelector('.div_comment'));
-		target.removeEventListener('click', remove_div_event);
-		target.addEventListener('click', com_event);
+
+		const comments_sidebar = document.getElementById("comments_sidebar");
+		const comments_sidebar_children = intoArray(comments_sidebar.children);
+
+		comments_sidebar.style.right = "-500px";
+		setTimeout(function() {
+			comments_sidebar.style['transition-duration'] = '0s';
+			// We empty Comments Sidebar from comments
+			comments_sidebar_children.forEach(function(elem) {
+				if (!elem.classList.contains('comments_sidebar_title') ) {
+					elem.parentNode.removeChild(elem);
+				}
+			});
+		}, 1000);
+		// Replace event by an Openning Event.
+		current_picture_comment_icon.removeEventListener('click', close_comments_sidebar);
+		current_picture_comment_icon.addEventListener('click', open_comments_sidebar);
+		current_picture_comment_icon = null;
+		current_picture = null;
 	}
 
-	function com_event(e) {
-		var target = this;
-		var image = this.parentNode.parentNode.parentNode;
+	function open_comments_sidebar(e) {
+
+
+		const open = () => {
+
+			current_picture_comment_icon = this;
+			current_picture = this.parentNode.parentNode.parentNode;
+
+			// Backend Call to retreive comments
+			sendRequest('XML', setRequest('POST', 'gallery/get_comments',
+			{'id_image':current_picture.id}), function (response) {
+
+				// Open Comments SideBar
+				const comments_sidebar = document.getElementById("comments_sidebar");
+				const body = document.body;
+				const top = (window.pageYOffset || body.scrollTop)  - (body.clientTop || 0);
+
+				comments_sidebar.style.top = top + "px";
+				comments_sidebar.style['transition-duration'] = '1s';
+				comments_sidebar.style.right = "0";
+				comments_sidebar.style.width = "25%";
+
+
+				// Append every comment in response to the Comments SideBar
+				const tab = response.getElementsByTagName('comment');
+				for (var i = 0; i < tab.length; i++) {
+					const com = xml_to_com_obj(tab[i]);
+					const com_dom = com_obj_to_dom(com);
+					comments_sidebar.appendChild(com_dom);
+				}
+
+				// Append comment input to the Comments SideBar
+				comments_sidebar.appendChild(input_comment(current_picture, comments_sidebar));
+
+				// Replace this event by a Closing event.
+				current_picture_comment_icon.removeEventListener('click', open_comments_sidebar);
+				current_picture_comment_icon.addEventListener('click', close_comments_sidebar);		
+			});
+		};
 
 		e.preventDefault();
-		sendRequest('XML', setRequest('POST', 'gallery/get_comments',
-		{'id_image':image.id}), function (response) {
-			var div_comment = add_div_comment(image);
-			var tab = response.getElementsByTagName('comment');
-			for (var i = 0; i < tab.length; i++) {
-				var com = xml_to_com_obj(tab[i]);
-				var com_dom = com_obj_to_dom(com);
-				div_comment.appendChild(com_dom);
-			}
-			div_comment.appendChild(input_comment(image, div_comment));
-			target.removeEventListener('click', com_event);
-			target.addEventListener('click', function(e) {
-				target = this;
-				remove_div_event(e, image, target)
-			});
-		});
+		if(current_picture || current_picture_comment_icon) {
+			close_comments_sidebar(e);
+			setTimeout(open, 1000);
+		}
+		else 
+			open();
+		
+
+
+		
+
+
 	}
 
 	function add_event() {
+
+		// Add Closing Event to Closing Icon.
+		const close_icon = document.getElementById('comments_sidebar_title_close');
+		close_icon.addEventListener('click', close_comments_sidebar);	
+
+		// Add Openning Event to all comments Icons.	
 		var comment_all = document.querySelectorAll('.comment');
 		for (var i = 0; i < comment_all.length; i++) {
-			comment_all[i].addEventListener("click", com_event);
+			comment_all[i].addEventListener("click", open_comments_sidebar);
 		}
 	}
 
 	add_event();
 }
+
+
+function Pagination() {
+
+
+	function create_pagination (total_pages) {
+
+		const URL = document.URL;
+		const gallery_pagination = document.getElementById('gallery_pagination');
+
+		for (var i = 0; i < total_pages; i++) {
+			const page_number = document.createElement('a');
+			page_number.href = URL.split('?')[0] + '?page=' + i;
+			page_number.innerHTML = i; 
+			gallery_pagination.appendChild(page_number);
+		}
+	}
+
+	function get_total_pages() {
+
+		const callback = (response)  => {
+			const total_pages = response.getElementsByTagName('total_pages')[0].innerHTML;
+			create_pagination(total_pages);
+		};
+
+		// Ajax Call to Backend
+		sendRequest("XML", setRequest('POST', 'gallery/get_total_pages', {'total_pages':'ok'}), callback);
+
+	}
+
+	get_total_pages();
+}
+
+
 Resize_control(document.getElementById('range'), document.querySelectorAll('.picture_card'));
+Pagination();
 likeSetup();
 like();
 comment();
