@@ -1,6 +1,5 @@
 function Resize_control(range, images) {
 
-
 	if (images)
 		var orig_size = images[0].clientWidth;
 
@@ -158,7 +157,7 @@ function comment() {
 
 	add_event();
 }
-Resize_control(document.getElementById('range'), document.querySelectorAll('.img'));
+Resize_control(document.getElementById('range'), document.querySelectorAll('.picture_card'));
 likeSetup();
 like();
 comment();

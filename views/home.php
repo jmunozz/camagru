@@ -1,39 +1,31 @@
-<div class="container page">
-	<div class="main container column">
-		<div class="container b2">
-			<div id="camera">
-				<img src="assets/img/camera.png" />
-			</div>
-			<div id="camera-menu" class="container column j-center">
-				<img id="activate_cam" src="assets/img/play.png" />
-				<img id="take-picture" src="assets/img/camera.png" />
-				<label for="file">
-					<img id="activate_file" src="assets/img/dots.png" />
-				</label>
-				<input type="file" id="file">
-				<img id="sizeUp" src="assets/img/plus.png" />
-				<img id="sizeDown" src="assets/img/minus.png" />
-			</div>
+<div id="content">
+	<!-- Main -->
+	<div id="main">
+		<!-- Toolbar -->
+		<div id="toolbar">
+			<?php include('views/toolbar.php'); ?>
 		</div>
-		<div class="container column b2">
-<?php
-include ('views/h-list.php');
-?>
+		<!-- Camera -->
+		<div id="camera">
+				<img src="assets/img/camera.png" />
+		</div>
+		<!-- Filters -->
+		<div id="filters">
+			<?php include ('views/filters.php'); ?>
 		</div>
 	</div>
-	<div class="side j-center container b2">
-<?php
-include ('views/v-list.php');
-?>
-		</div>
+	<!-- Side Bar -->
+	<div id="pics">
+		<?php include('views/pics.php') ?>
 	</div>
 </div>
+
+
+
 <script src="assets/js/setFilters.js"></script>
 <script>
 
 var url_base = document.URL.split('/')[3];
-console.log(url_base);
-
 
 
 function includeJs(file) {
@@ -52,6 +44,10 @@ includeJs('assets/js/ajax.js');
 var ratio = null;
 var is_stream = false;
 
+
+/*
+** Transform an iterator into an array.
+*/
 function intoArray(something) {
 	var array = [];
 	for(var i = 0; i < something.length; i++) {
@@ -82,7 +78,6 @@ function previewImage() {
 	}
 
 	function displayImage(){
-		console.log(camera.children[0]);
 		camera.children[0].src = reader.result;
 		camera.children[0].id = 'file_preview';
 	}
@@ -116,7 +111,6 @@ function convertDivtoImg(filterTab)
 		img.y = elem.style.getPropertyValue('top').slice(0, -2) * ratio;
 		img.x = elem.style.getPropertyValue('left').slice(0, -2) * ratio;
 		filterTabImg.push(img);
-		console.log(img);
 	});
 	return filterTabImg;
 }
@@ -131,21 +125,19 @@ function buildObjectSent(img, filters, name) {
 	filters.forEach(function(elem) {
 		Object['filter_' + i++] = JSON.stringify(elem);
 	});
-	console.log(Object);
 	return Object;
 }
 
 function AddPictureGallery(response) {
 	var src = response.getElementsByTagName('src')[0];
 	var id  = response.getElementsByTagName('id')[0];
-	console.log(id, src);
 	var li  = document.createElement('li');
 	var img  = document.createElement('img');
-	var v_list = document.getElementById('v-list');
+	var pics = document.getElementById('pics');
 	img.setAttribute('src', src.innerHTML);
 	img.setAttribute('data-id', id.innerHTML);
 	li.appendChild(img);
-	v_list.children[1].prepend(li);
+	pics.children[1].prepend(li);
 	li.addEventListener("click", function() {
 	setVSelected(this);})
 
@@ -159,20 +151,22 @@ function addDefaultImgFile() {
 
 function sendPicture() {
 
-	var img = is_stream ? document.getElementById('preview') :
-	document.getElementById('file_preview');
+	var img = is_stream ? document.getElementById('preview') : document.getElementById('file_preview');
+	console.log('img', img);
 	var imgFilters = convertDivtoImg(getFilterTab());
 	var name = document.getElementById('name_bar').children[0].value;
 	var files = buildObjectSent(img, imgFilters, name);
-	sendRequest('XML', setRequest('POST', 'home/sendPicture', files),
-	AddPictureGallery);
+	console.log(files);
+	sendRequest('XML', setRequest('POST', 'home/sendPicture', files), AddPictureGallery);
 	resetImage();
 }
 
 function resetImage() {
 
-	var c_child = intoArray(document.getElementById('camera').children);
-	c_child.forEach(function(elem) {
+	const camera = document.getElementById('camera');
+
+	var camera_children = intoArray(camera.children);
+	camera_children.forEach(function(elem) {
 		if (elem.tagName == 'DIV' || elem.tagName == 'IMG') {
 			elem.parentNode.removeChild(elem);
 		}
@@ -194,16 +188,15 @@ function Video() {
 		canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
 	}
 
+	
 	function setVideo() {
-		var video = document.createElement("video");
-		var canvas = document.createElement("canvas");
-		var test = document.createElement('div');
-		test.setAttribute('class', 'test');
+		const video = document.createElement("video");
+		const canvas = document.createElement("canvas");
 
 		video.setAttribute("id", "video");
 		canvas.setAttribute("id", "canvas");
 		camera.prepend(video);
-		camera.append(canvas);
+		camera.prepend(canvas);
 	}
 
 	function activateCamera() {
@@ -247,7 +240,6 @@ function Video() {
 
 	function getValidateBar() {
 		var bar = document.createElement('div');
-		bar.setAttribute('class', 'container j-center');
 		bar.setAttribute('id', 'validate_bar');
 		getValidate(bar);
 		getCancel(bar);
@@ -297,18 +289,33 @@ function Video() {
 		activateCamera();
 	}
 
+	
+
+
+	/*
+	** Remove every child of camera elem.
+	*/
 	function removeVideo() {
-		var children = intoArray(camera.children);
+
+		const camera = document.getElementById("camera");
+		const children = intoArray(camera.children);
+
 		children.forEach(function(elem) {
 			camera.removeChild(elem);
-			});
+		});
 	}
 
+	/*
+	** Remove every child of camera elem.
+	*/
 	function removeImage() {
-		var children = intoArray(camera.children);
+
+		const camera = document.getElementById("camera");
+		const children = intoArray(camera.children);
+
 		children.forEach(function(elem) {
 			camera.removeChild(elem);
-			});
+		});
 	}
 
 	function addImage() {
@@ -326,6 +333,9 @@ function Video() {
 		}
 	});
 
+	/*
+	** PLAY
+	*/
 	play_button.addEventListener("click", function() {
 		if (!is_stream) {
 			removeImage();
@@ -338,6 +348,8 @@ function Video() {
 	pic_button.addEventListener('click', takepicture);
 	
 }
+
+
 
 previewImage();
 Video();

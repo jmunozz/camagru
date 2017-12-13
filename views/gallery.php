@@ -1,28 +1,28 @@
-<div class="container j-center">
-	<label>Taille des images</label>
+<div id="gallery_toolbar">
+	<label>Pictures Size</label>
 	<input id="range" type="range" />
 </div>
-<div class="page container gallery">
+<div id="gallery">
 
 <?php
 	//print_r($images);
 	foreach($gallery as $image) {
 ?>
-		<div id="<?php echo $image['img_id']; ?>" class="container column img">
-			<div class="opac">
+		<div id="<?php echo $image['img_id']; ?>" class="picture_card">
+			<div class="picture_info">
+				<span class="picture_info_date"><?php echo $image['date']; ?></span>
+				<span class="picture_info_author"><? echo $image['user']; ?></span>
 			</div>
-			<div class="container img_infos">
-				<span><small><?php echo $image['date']; ?></small></span>
+			<div class="picture_info picture_info_title">
 				<span><?php echo $image['titre']; ?></span>
-				<span><small><? echo $image['user']; ?></small></span>
 			</div>
-			<img class="photo" src="<?php echo $this->url_base.'/'.$image['path'] ?>"/>
-			<div class="container icon">
-				<div class="container">
+			<img src="<?php echo $this->url_base.'/'.$image['path'] ?>"/>
+			<div class="picture_social">
+				<div>
 					<span class="nb"><?php echo $image['nb_comment']; ?></span>
 					<img  class ="comment" src="<?php echo $this->url_base; ?>/assets/img/comment.png" />
 				</div>
-				<div class="container">
+				<div>
 					<span class="nb"><?php echo $image['nb_like']; ?></span>
 					<img class="like" src="<?php echo $this->url_base; ?>/assets/img/red_like.png" />
 				</div>
