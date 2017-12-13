@@ -22,6 +22,11 @@
 			</li>
 <?php } else { ?>
 			<li>
+				<a href="<?php echo $this->url_base.'/settings'; ?>">
+					<b>Settings</b>
+				</a>
+			</li>
+			<li>
 				<a href="<?php echo $this->url_base.'/login/out'; ?>">
 					<b>Logout</b>
 				</a>
