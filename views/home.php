@@ -21,24 +21,8 @@
 </div>
 
 
-
-<script src="assets/js/setFilters.js"></script>
-<script>
-
-var url_base = document.URL.split('/')[3];
-
-
-function includeJs(file) {
-	script = document.createElement("script");
-	script.setAttribute('src', file);
-	script.setAttribute('type', 'text/javascript');
-	document.body.appendChild(script);
-}
-
-includeJs('assets/js/ajax.js');
-
-
-</script>
+<script src=<?php echo '"' . $this->url_base . '/assets/js/setFilters.js"' ?>></script>
+<script src=<?php echo '"' . $this->url_base . '/assets/js/ajax.js"' ?>></script>
 <script>
 
 var ratio = null;

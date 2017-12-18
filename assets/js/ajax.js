@@ -53,7 +53,6 @@ function getFormData(args) {
 	var data = new FormData();
 	var keys = Object.keys(args);
 	keys.forEach(function(keys) {
-	console.log(keys);
 		data.append(keys, args[keys]);
 	});
 	return(data);

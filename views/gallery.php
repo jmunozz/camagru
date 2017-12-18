@@ -35,19 +35,6 @@
 ?>
 <div id="gallery_pagination">
 </div>
-<script>
 
-	var url_base = document.URL.split('/')[3];
-
-	function includeJs(file) {
-		script = document.createElement("script");
-		script.setAttribute('src', file);
-		script.setAttribute('type', 'text/javascript');
-		document.body.appendChild(script);
-	}
-
-	includeJs('assets/js/ajax.js');
-	includeJs('assets/js/gallery_resize.js');
-
-
-</script>
+<script src=<?php echo '"' . $this->url_base . '/assets/js/ajax.js"' ?>></script>
+<script src=<?php echo '"' . $this->url_base . '/assets/js/gallery_resize.js"' ?>></script>

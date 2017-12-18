@@ -33,7 +33,7 @@ else  {
 	else {
 		$class = new $url[0]($url_base);
 		if (isset($url[1]) && $url[1]) {
-			if (method_exists($url[0], $url[1])) {
+			if (method_exists($url[0], $url[1]) && is_callable(array($class, $url[1]))) {
 				if (isset($url[2]) && $url[2])
 					call_user_func(array($class, $url[1]), $url[2]);
 				else

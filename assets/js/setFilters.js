@@ -5,7 +5,6 @@ function SetFilters(container, elems, sizeUp, sizeDown) {
 	var SelectElem = {};
 
 	function onSelectedElems(callback) {
-		console.log(SelectElem);
 		var keys = Object.keys(SelectElem);
 		var elem;
 		for (var i = 0; i < keys.length; i++) {
@@ -39,7 +38,6 @@ function SetFilters(container, elems, sizeUp, sizeDown) {
 		{	
 			if (e.keyCode == 8) {
 				onSelectedElems(function(elem) {
-					console.log(elem);
 					delete SelectElem[elem.id];
 					elem.parentNode.removeChild(elem);
 				});
@@ -123,7 +121,6 @@ function SetFilters(container, elems, sizeUp, sizeDown) {
 
 		function dropOnContainer(e) {
 			e.preventDefault();
-			console.log(e);
 			if (!ElemOnDrag)
 				return;
 			var elem  = document.getElementById(ElemOnDrag.id);
@@ -132,7 +129,6 @@ function SetFilters(container, elems, sizeUp, sizeDown) {
 				this.appendChild(elem);
 			}
 			var offset = e.dataTransfer.getData('offset');
-			console.log(ElemOnDrag);
 			elem.style.left = (e.offsetX - ElemOnDrag.offsetX) + 'px';
 			elem.style.top = (e.offsetY - ElemOnDrag.offsetY) + 'px';
 			ElemOnDrag = null;
@@ -153,5 +149,4 @@ var sizeUp = document.getElementById('sizeUp');
 var sizeDown = document.getElementById('sizeDown');
 var container = document.getElementById('camera');
 var elems = document.getElementsByClassName('filters');
-console.log(sizeUp, sizeDown, container, elems);
 SetFilters(container, elems, sizeUp, sizeDown);

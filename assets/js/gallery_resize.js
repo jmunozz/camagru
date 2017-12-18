@@ -10,8 +10,6 @@ function intoArray(something) {
 }
 
 
-
-
 function Resize_control(range, images) {
 
 	if (images)

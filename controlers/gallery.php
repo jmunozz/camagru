@@ -11,14 +11,23 @@ Class Gallery {
 		$this->PICTURES_PER_PAGE = 15;
 	}
 
+
+
 	public function index()  {
 		$this->display();
 	}
 
+	
+	/*
+	** Return number of pages that needs to be displayed on pagination.
+	*/
 	public function get_total_pages() {
-		if(!isset($_POST['total_pages']) || $_POST['total_pages'] !== 'ok') {
-			$this->display();
+
+		// User is making a GET request. Redirect on gallery default page.
+		if(!isset($_POST['total_pages'])) {
+			$this->redirect();
 		}
+		// User is making an POST AJAX request. Return XML object with total_pages number.
 		else {
 			$total_pictures = $this->model->get_total_pictures();
 			$total_pages = ceil($total_pictures / $this->PICTURES_PER_PAGE);
@@ -27,29 +36,53 @@ Class Gallery {
 		}
 	}
 
+
+	/*
+	** Return pictures_id of pictures liked by user if connected.
+	*/
 	public function get_user_likes() {
-		if (!isset($_SESSION['user_id']) || !$_SESSION['user_id'] ||
-		!isset($_POST['get_user_likes']) || $_POST['get_user_likes'] !== 'ok') {
+
+
+		// User is making a GET request. Redirect on gallery default page.
+		if(!isset($_POST['get_user_likes'])) {
+			$this->redirect();
+		}
+
+		// User is not connected. Return an empty XML object.
+		if (!isset($_SESSION['user_id']) || !$_SESSION['user_id']) {
 			header('Content-Type: text/xml');
 			echo '<like></like>';
 		}
+
+		// Request is valid. Return XML object.
 		else
 		{
 			$likes = $this->model->get_user_likes($_SESSION['user_id']);
 			header('Content-Type: text/xml');
 			echo '<like>';
-				foreach ($likes as $like) {
-					echo '<image id="'.$like['id_image'].'" />';
-				}
+			foreach ($likes as $like) {
+				echo '<image id="' . $like['id_image'] . '" />';
+			}
 			echo '</like>';
 		}
 	}
 
+	/*
+	** Add comment to id_image picture.
+	*/
 	public function add_comment() {
-		if (!isset($_SESSION['user_id']) || !$_SESSION['user_id'] || !isset(
-			$_POST['id_image']) || !$_POST['id_image'] || !isset($_POST['text']) ||
-			!$_POST['text'])
+
+
+		// User is making a GET request. Redirect on default gallery page.
+		if(!isset($_POST['id_image']) || !isset($_POST['text'])) {
+			$this->redirect();
+		}
+
+		// User is not connected. Return skip text.
+		if (!isset($_SESSION['user_id']) || !$_SESSION['user_id'])
 			echo 'skip';
+
+		// Valid Ajax POST request. Add comment and return it.
 		else {
 			$ret = $this->model->add_comment($_SESSION['user_id'], 
 			$_POST['id_image'], $_POST['text']);
@@ -64,10 +97,16 @@ Class Gallery {
 		}
 	}
 	
-
+	/*
+	** Return comments for id_image picture.
+	*/
 	public function get_comments() {
-		if (!isset($_POST['id_image']) || !$_POST['id_image'])
-			$this->display();
+
+		// User is making a GET request. Redirect on default gallery page.
+		if (!isset($_POST['id_image']))
+			$this->redirect();
+		
+		// User is making a valid Ajax POST request. Return id_image comments.
 		else {
 			$comments = $this->model->get_comments($_POST['id_image']);
 			header('Content-Type: text/xml');
@@ -83,22 +122,33 @@ Class Gallery {
 		}
 	}
 
+	/* 
+	** Like/Dislike image_id picture.
+	*/
 	public function like() {
-		if (!isset($_SESSION['user_id']) || !$_SESSION['user_id'] || !isset(
-		$_POST['id_image']) || !$_POST['id_image'])
+
+		// User is making a GET request. Redirect on default gallery page.
+		if(!isset($_POST['id_image'])) {
+			$this->redirect();
+		}
+
+		// User is not conncted. Return skip text.
+		if (!isset($_SESSION['user_id']) || !$_SESSION['user_id'])
 			echo 'skip';
+		
+		// User is making an Ajax POST request. Add like and return ok.
 		else
 		{
-			$ret = $this->model->add_like($_SESSION['user_id'],
-			$_POST['id_image']);
+			$ret = $this->model->add_like($_SESSION['user_id'], $_POST['id_image']);
 			echo $ret;
 		}
 	}
 	
-	public function comment() {
-	}
 
-	public function display() {
+	/* 
+	** Will display default gallery page. Cannot be called in url.
+	*/
+	private function display() {
 
 		$page = (isset($_GET['page'])) ? $_GET['page'] : 0;
 		if ($page < 0) $page = 0;
@@ -110,6 +160,15 @@ Class Gallery {
 		include ('views/header.php');
 		include ('views/gallery.php');
 		include ('views/footer.php');
+		exit();
+	}
+
+	/*
+	** Will redirect user on default gallery page. Cannot be called in url.
+	*/
+	private function redirect() {
+		header('Location: ' . $this->url_base . '/gallery');
+		exit();	
 	}
 }
 ?>
