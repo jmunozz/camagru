@@ -80,14 +80,14 @@ function SetFilters(container, elems, sizeUp, sizeDown) {
 
 	function cloneElement(elem) {
 		var style = window.getComputedStyle(elem);
-		var newElem = createElement('div',
+		console.log(elem);
+		var newElem = createElement('img',
 			{
 			'height':style.getPropertyValue('height'),
-			'width':style.getPropertyValue('width'),
-			'background-image': 'url(' + elem.src + ')',
 			'position':'absolute'
 			}
 		);
+		newElem.src = elem.src
 		newElem.draggable = true;
 		newElem.classList.add('cloned');
 		newElem.id = 'on_' + ElemOnCount++;
@@ -98,6 +98,7 @@ function SetFilters(container, elems, sizeUp, sizeDown) {
 
 	function dragElem(elem) {
 		elem.addEventListener('dragstart', function(e) {
+		console.log('dragstart');
 		ElemOnDrag =
 			{
 				'id':e.target.id,
@@ -116,10 +117,12 @@ function SetFilters(container, elems, sizeUp, sizeDown) {
 	function setContainer(container) {
 	
 		container.addEventListener('dragover', function(e) {
+			console.log('element dragged over')
 			e.preventDefault();
 		});
 
 		function dropOnContainer(e) {
+			console.log("element dropped");
 			e.preventDefault();
 			if (!ElemOnDrag)
 				return;

@@ -2,13 +2,11 @@
 
 Class Settings_Model {
 
-	public $url_base;
 	public $bdd;
 	public $bdd_obj;
 	public $user_infos = null;
 
-	public function __construct($url_base) {
-		$this->url_base = $url_base;
+	public function __construct() {
 		include ('models/bdd_model.php');
 	}
 
@@ -35,8 +33,7 @@ Class Settings_Model {
 	}
 
 	public function get_user_comment_tag($user_id) {
-		// return $this->get_user_infos($user_id)['comment_tag'];
-		return true;
+		return $this->get_user_infos($user_id)['comment_tag'];
 	}
 
 

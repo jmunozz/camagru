@@ -11,7 +11,7 @@ class Bdd {
 	public $last_statement_return;
 
 	static public function get_instance() {
-		require_once('config/infos.php');
+		require_once('config/database.php');
 		try {
 			$dbh = new PDO($DB_HOSTNAME, $DB_USER, $DB_PWD, $DB_OPTIONS);
 		}

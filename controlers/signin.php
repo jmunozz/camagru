@@ -8,13 +8,7 @@ Class Signin {
 
 	public $bdd;
 	public $bdd_obj;
-	public $url_base;
 	public $_data;
-
-	public function __construct($url_base) {
-		$this->url_base = $url_base;
-	}
-
 	
 	/*
 	** Root to the right method.
@@ -87,7 +81,7 @@ Class Signin {
 		}
 
 		// Will redirect user to step 2 (code validation);
-		header('Location: '.$this->url_base.'/validate?mail='.$email);
+		header('Location: /validate?mail=' . $email);
 		return;
 	}
 
@@ -108,7 +102,7 @@ Class Signin {
 		$secure_pwd = hash('whirlpool', $pwd);
 
 		require_once('models/Mail_model.php');	
-		Mail::init($this->url_base);
+		Mail::init();
 		Mail::sendCodeToUser($code, $email, $login);
 
 		return $this->bdd_obj->insert_user($login, $secure_pwd, $email, $code);

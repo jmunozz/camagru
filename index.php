@@ -3,7 +3,17 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 session_name('em');
 session_start();
-$url_base = '/'.basename(__DIR__);
+
+require_once('config/constants.php');
+
+if (file_exists('.setup')) {
+	require_once('config/setup.php');
+	if (install()) {
+		unlink('.setup');
+	}
+}
+
+
 $controlers_list = array('settings.php', 'install.php', 'home.php', 'signin.php', 'login.php', 'add.php', 'gallery.php', 'validate.php');
 # Intègre tous les controlers en se protégeant contre l'upload de fichiers infectés.
 
@@ -21,7 +31,7 @@ else
 	$url = NULL;
 
 if (!$url || $url[0] == 'index.php' ) {
-	$home = new Home($url_base);
+	$home = new Home();
 	$home->index();
 }
 else  {
@@ -31,7 +41,7 @@ else  {
 		exit();
 	}
 	else {
-		$class = new $url[0]($url_base);
+		$class = new $url[0]();
 		if (isset($url[1]) && $url[1]) {
 			if (method_exists($url[0], $url[1]) && is_callable(array($class, $url[1]))) {
 				if (isset($url[2]) && $url[2])

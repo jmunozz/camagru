@@ -22,7 +22,7 @@
 </div>
 
 <!-- Load Utils Ajax functions -->
-<script src=<?php echo '"' . $this->url_base . '/assets/js/ajax.js"' ?>></script>
+<script src="/assets/js/ajax.js"></script>
 
 <script>
 

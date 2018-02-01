@@ -5,9 +5,9 @@
 <ul>
 
 <?php
-for($i = 0; $h_list[$i]; $i++) {
+for($i = 0; $i < count($filters); $i++) {
 	echo '<li>
-			<img id="filter_' . $i . '" class="filters" src="' . $h_list[$i]['path'] . '" />
+			<img id="filter_' . $i . '" class="filters" src="' . FILTERS_DIR . $filters[$i]['path'] . '" />
 		</li>';
 }
 ?>
@@ -22,29 +22,29 @@ for($i = 0; $h_list[$i]; $i++) {
 
 <script>
 
-	/*
-	** A réparer.
-	*/
 	function addScroll() {
 
 		function addScrollLeft() {
 			var scroll = this;
 			var stop = setInterval(function() {
-			scroll.parentNode.querySelector("ul").scrollLeft -= 10;
+				scroll.parentNode.querySelector("ul").scrollLeft -= 10;
 			}, 50);
 
 			scroll.addEventListener("mouseout", function() {
-			clearInterval(stop)});
+				clearInterval(stop)
+			});
 		}
 
 		function addScrollRight() {
-		var scroll = this;
-		var stop = setInterval(function() {
-		scroll.parentNode.querySelector("ul").scrollLeft += 10;
-		}, 50);
+			
+			var scroll = this;
+			var stop = setInterval(function() {
+				scroll.parentNode.querySelector("ul").scrollLeft += 10;
+			}, 50);
 
-		scroll.addEventListener("mouseout", function() {
-		clearInterval(stop)});
+			scroll.addEventListener("mouseout", function() {
+				clearInterval(stop)
+			});
 		}
 
 		var scroll = document.querySelectorAll(".scroll-horizontal");

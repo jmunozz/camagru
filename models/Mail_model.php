@@ -4,10 +4,6 @@ Class Mail {
 
 	static public $url_base;
 
-	static public function init($url_base) {
-		self::$url_base = $url_base;
-	}
-
 	
 	/*
 	** Format Code Validation email and send to user.
@@ -34,7 +30,7 @@ Class Mail {
 	*/ 
 	static public function sendPwdCodeToUser($code, $email, $login) {
 
-		$url = $_SERVER['HTTP_HOST'] . self::$url_base . '/validate/password_change?mail=' . $email . '&code=' . $code;
+		$url = $_SERVER['HTTP_HOST'] . '/validate/password_change?mail=' . $email . '&code=' . $code;
 
 		$subject =	'Camagru: Ré-initialisation de votre mot de passe';
 

@@ -1,12 +1,10 @@
 <?php
 
 Class Gallery_model {
-	public $url_base;
 	public $bdd;
 	public $bdd_obj;
 
-	public function __construct($url_base) {
-		$this->url_base = $url_base;
+	public function __construct() {
 		include ('models/bdd_model.php');
 	}
 
@@ -36,7 +34,7 @@ Class Gallery_model {
 	}
 
 	public function get_total_pictures() {
-		$query = "SELECT COUNT(*) FROM images";
+		$query = "SELECT COUNT(*) FROM images WHERE type=1";
 		$ret = $this->bdd_obj->do_statement($query);
 		if ($ret) {
 			return $ret[0][0];

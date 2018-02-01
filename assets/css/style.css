@@ -335,7 +335,11 @@ nav > ul > li > a:hover {
 	margin:0;
 	padding:0;
 	z-index:1;
+	overflow: scroll;
+	white-space: nowrap;
+	width:100%;
 }
+
 
 #filters ul li {
 	display:inline-block;
@@ -351,6 +355,8 @@ nav > ul > li > a:hover {
 
 #filters ul li img {
 	height:100%;
+	max-width:100px;
+
 }
 
 #filters img {

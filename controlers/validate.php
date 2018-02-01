@@ -4,12 +4,7 @@ Class Validate {
 
 	public $bdd;
 	public $bdd_obj;
-	public $url_base;
 	public $_data;
-
-	public function __construct($url_base) {
-		$this->url_base = $url_base;
-	}
 
 	/*
 	** Roots user to finishing registration.
@@ -141,7 +136,7 @@ Class Validate {
 
 		// If we have missing email, code, invalid user, wrong user_code, display login page.
 		if (!$code || !$mail || !$user || $user[0]['code'] !== $code)
-				header('Location: '.$this->url_base.'/login');
+				header('Location: /login');
 		
 		// If pwd is not submitted yet (first time), display pwd_init page.
 		else if (!$pwd)

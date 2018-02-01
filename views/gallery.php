@@ -3,7 +3,7 @@
 	<input id="range" type="range" />
 </div>
 <div id="comments_sidebar">
-	<div class="comments_sidebar_title">Comments <img id="comments_sidebar_title_close" src="<?php echo $this->url_base; ?>/assets/img/cancel.png" /></div>
+	<div class="comments_sidebar_title">Comments <img id="comments_sidebar_title_close" src="/assets/img/cancel.png" /></div>
 </div>
 <div id="gallery">
 
@@ -19,15 +19,15 @@
 			<div class="picture_info picture_info_title">
 				<span><?php echo $image['titre']; ?></span>
 			</div>
-			<img src="<?php echo $this->url_base.'/'.$image['path'] ?>"/>
+			<img src="<?php echo '/'.$image['path'] ?>"/>
 			<div class="picture_social">
 				<div>
 					<span class="nb"><?php echo $image['nb_comment']; ?></span>
-					<img  class ="comment" src="<?php echo $this->url_base; ?>/assets/img/comment.png" />
+					<img  class ="comment" src="/assets/img/comment.png" />
 				</div>
 				<div>
 					<span class="nb"><?php echo $image['nb_like']; ?></span>
-					<img class="like" src="<?php echo $this->url_base; ?>/assets/img/red_like.png" />
+					<img class="like" src="/assets/img/red_like.png" />
 				</div>
 			</div>
 		</div>
@@ -36,5 +36,5 @@
 <div id="gallery_pagination">
 </div>
 
-<script src=<?php echo '"' . $this->url_base . '/assets/js/ajax.js"' ?>></script>
-<script src=<?php echo '"' . $this->url_base . '/assets/js/gallery_resize.js"' ?>></script>
+<script src="/assets/js/ajax.js"></script>
+<script src="/assets/js/gallery_resize.js"></script>

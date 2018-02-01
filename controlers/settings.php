@@ -1,50 +1,18 @@
 <?php
 
 Class Settings {
-	public $url_base;
 	public $model;
 	public $_data = null;
 
-	/*
-	** If no session is set, this will redirect to homepage.
-	*/
-	private function validate_identity() {
-		if (!isset($_SESSION) || !$_SESSION['user_id']) {
-			header('Location:' . $this->url_base);
-			exit();
-		}
-		return;
-	}
-
-	public function __construct($url_base) {
-		$this->url_base = $url_base;
+	public function __construct() {
 		require_once('models/settings_model.php');
-		$this->model = new Settings_model($url_base);
+		$this->model = new Settings_model();
 	}
 
 	public function index()  {
 		$this->validate_identity();
 		$this->display();
 	}
-
-	public function display() {
-		$this->validate_identity();
-
-		// Get all variables to be displayed.
-		$user_id = $_SESSION['user_id'];
-		$user_name = $this->model->get_user_name($user_id);
-		$user_email =  $this->model->get_user_email($user_id);
-		if (!$user_email) $user_email = '';
-		$user_comment_tag = $this->model->get_user_comment_tag($user_id);
-
-		// Display Page.
-		include ('views/head.php');
-		include ('views/header.php');
-		include ('views/settings.php');
-		include ('views/footer.php');
-		exit();
-	}
-
 
 	/*
 	** Change user password or display appropriate page.
@@ -117,6 +85,35 @@ Class Settings {
 			echo 'Something went wrong';
 			exit();
 		}
+	}
+
+	private function display() {
+		$this->validate_identity();
+
+		// Get all variables to be displayed.
+		$user_id = $_SESSION['user_id'];
+		$user_name = $this->model->get_user_name($user_id);
+		$user_email =  $this->model->get_user_email($user_id);
+		if (!$user_email) $user_email = '';
+		$user_comment_tag = $this->model->get_user_comment_tag($user_id);
+
+		// Display Page.
+		include ('views/head.php');
+		include ('views/header.php');
+		include ('views/settings.php');
+		include ('views/footer.php');
+		exit();
+	}
+
+	/*
+	** If no session is set, this will redirect to homepage.
+	*/
+	private function validate_identity() {
+		if (!isset($_SESSION['user_id']) || !$_SESSION['user_id']) {
+			header('Location: /');
+			exit();
+		}
+		return;
 	}
 }
 ?>

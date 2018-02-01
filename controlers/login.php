@@ -5,11 +5,6 @@ Class Login {
 	public $_data = '';
 	public $bdd;
 	public $bdd_obj;
-	public $url_base;
-	
-	public function __construct($url_base) {
-		$this->url_base = $url_base;
-	}
 
 	public function index() {
 
@@ -28,7 +23,7 @@ Class Login {
 		}
 		$_SESSION['user_id'] = $user['id'];
 		$_SESSION['user_login'] = $user['login'];
-		header('Location: '.$this->url_base);
+		header('Location: /');
 		return;
 	}
 
@@ -63,7 +58,7 @@ Class Login {
 	public function out(){
 		$_SESSION['user_id'] = '';
 		$_SESSION['user_login'] = '';
-		header('Location: '.$this->url_base);
+		header('Location: /');
 	}
 
 	public function init() {

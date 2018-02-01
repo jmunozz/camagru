@@ -1,13 +1,11 @@
 <?php
 
 Class Gallery {
-	public $url_base;
 	public $model;
 
-	public function __construct($url_base) {
-		$this->url_base = $url_base;
+	public function __construct() {
 		require_once('models/gallery_model.php');
-		$this->model = new Gallery_model($url_base);
+		$this->model = new Gallery_model();
 		$this->PICTURES_PER_PAGE = 15;
 	}
 
@@ -167,7 +165,7 @@ Class Gallery {
 	** Will redirect user on default gallery page. Cannot be called in url.
 	*/
 	private function redirect() {
-		header('Location: ' . $this->url_base . '/gallery');
+		header('Location: /gallery');
 		exit();	
 	}
 }

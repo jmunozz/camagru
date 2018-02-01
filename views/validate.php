@@ -2,7 +2,7 @@
 	<section>
 		<center><h1>Register</h1></center>
 		<div class="container">
-			<form method="get" action="<?php $this->url_base.'/validate' ?>">
+			<form method="get" action="/validate">
 				<h3>Entrez le code que vous avez reçu par email</h3>
 				<?php if ($this->_data) { ?>
 					<p class="red"><?php echo $this->_data; ?></p>

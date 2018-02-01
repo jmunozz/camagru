@@ -2,7 +2,7 @@
 	<section>
 		<center><h1>Register</h1></center>
 		<div class="container">
-			<form method="post" action="<?php $this->url_base.'/signin' ?>">
+			<form method="post" action="/signin">
 				<h3>Inscrivez-vous</h3>
 				<?php if ($this->_data) { ?>
 					<p class="red"><?php echo $this->_data; ?></p>

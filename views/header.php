@@ -2,12 +2,12 @@
 	<nav>
 		<ul>
 			<li>
-				<a href="<?php echo $this->url_base; ?>">
+				<a href="/">
 					<b>Home</b>
 				</a>
 			</li>
 			<li>
-				<a href="<?php echo $this->url_base; ?>/gallery">
+				<a href="/gallery">
 					<b>Gallery</b>
 				</a>
 			</li>
@@ -16,18 +16,18 @@
 		!$_SESSION['user_login'] || !$_SESSION['user_id']) {
 ?>	
 			<li>
-				<a href="<?php echo $this->url_base.'/login'; ?>">
+				<a href="/login">
 					<b>Login</b>
 				</a>
 			</li>
 <?php } else { ?>
 			<li>
-				<a href="<?php echo $this->url_base.'/settings'; ?>">
+				<a href="/settings">
 					<b>Settings</b>
 				</a>
 			</li>
 			<li>
-				<a href="<?php echo $this->url_base.'/login/out'; ?>">
+				<a href="/login/out">
 					<b>Logout</b>
 				</a>
 			</li>
